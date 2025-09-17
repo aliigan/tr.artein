@@ -1,4 +1,4 @@
-# BuildTech CMS - Modern PHP CMS
+# ArteIn CMS - Modern PHP CMS
 
 ## 🚀 Hızlı Başlangıç
 
