@@ -1,0 +1,64 @@
+# PHP Backoffice for Turkish Construction Company
+
+Applies-To: repo
+Owner: Team
+Status: active
+Description: Admin-only PHP site for a Turkish construction company. Turkish content, English file names. Fast, secure, SEO-first.
+
+## Goals
+- Single admin login; no public accounts or registrations.
+- High performance, SEO-first, image-heavy project pages.
+- PHP 7.4+ compatibility; code style PSR-12.
+- English file/route/class names; Turkish UI/content.
+
+## Constraints
+- Keep dependencies minimal (dotenv OK; no heavy frameworks).
+- PDO with prepared statements only. No mysqli_*.
+- Views are plain PHP templates with partials (no Blade/Twig).
+- All uploads are images; store originals + webp + thumbnail.
+
+## Routing & Structure
+- Front routes: `/`, `/projects`, `/project/{slug}`, `/page/{slug}`.
+- Admin routes under `/admin/*`; protect with session middleware.
+- File layout exactly as documented in /app and /public.
+- Use a single `index.php` front controller with a lightweight Router.
+
+## Code Style
+- Follow PSR-12; namespaces under `App\`.
+- Controller method naming: `index`, `show`, `create`, `store`, `edit`, `update`, `destroy`.
+- Return types declared where possible; strict_types enabled in PHP files.
+- Use early returns; avoid deep nesting.
+
+## Security
+- Passwords: password_hash/password_verify.
+- Sessions: httponly + secure + SameSite=Lax.
+- CSRF middleware for all POST requests.
+- Validate uploads by MIME and extension; hash filenames.
+- Prevent PHP execution inside uploads.
+- Escape all output with `htmlspecialchars`.
+
+## Performance
+- Enable OPcache on server.
+- Cache-control headers for static assets (1 year, immutable).
+- Generate WebP variants on upload; serve responsive `srcset`.
+- File or APCu caching for pages and fragments.
+- Database tables indexed on slugs, publish flags, sort order.
+
+## SEO
+- Slugs transliterated from Turkish to ASCII.
+- Meta title + description fields in DB; fallback to defaults.
+- JSON-LD schema for Organization + Projects.
+- Auto-generate `sitemap.xml` and `robots.txt`.
+- Canonical tags and hreflang set to tr-TR.
+
+## Testing
+- Use PHPUnit for model and service tests.
+- Admin auth flow tested with feature tests.
+- Ensure CSRF + session expiration cases covered.
+
+## Deployment
+- `.env` file for secrets and DB credentials.
+- Separate `storage/` for cache/logs, not public.
+- Only `public/` exposed to web server.
+- Apache: `.htaccess` with URL rewriting + block PHP in uploads.
+- Nginx: deny php execution in `/uploads`.

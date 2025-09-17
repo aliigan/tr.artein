@@ -1,0 +1,319 @@
+/* BuildTech CMS - Responsive Header Optimization
+ * Context7 Bootstrap patterns kullanılarak optimize edilmiş
+ * Tüm sayfalarda ortak header boyutlandırma
+ * Index.php'den alınan renk şeması uygulandı
+ */
+
+/* Bootstrap responsive breakpoints */
+:root {
+    --header-height-desktop: 55px;
+    --header-height-mobile: 45px;
+    --logo-height-desktop: 32px;
+    --logo-height-mobile: 28px;
+    --nav-padding-desktop: 0.4rem 0.7rem;
+    --nav-padding-mobile: 0.35rem 0.5rem;
+    /* Index.php renk şeması */
+    --header-bg-primary: #113736;
+    --header-bg-secondary: #1e5f5d;
+    --header-text-color: #ffffff;
+    --header-hover-color: #dfeade;
+    --body-bg-color: #dfeade;
+}
+
+/* Desktop navbar optimizations */
+.navbar {
+    min-height: 55px !important;
+    padding: 0.4rem 0 !important;
+    background: linear-gradient(135deg, var(--header-bg-primary) 0%, var(--header-bg-secondary) 100%) !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 2px 20px rgba(17, 55, 54, 0.3) !important;
+}
+
+.navbar-brand {
+    color: var(--header-text-color) !important;
+    font-weight: 700 !important;
+    font-size: 1.8rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.navbar-brand:hover {
+    color: var(--header-hover-color) !important;
+    transform: scale(1.05) !important;
+}
+
+.navbar-brand img {
+    height: 32px !important;
+    width: auto !important;
+    transition: all 0.3s ease !important;
+    object-fit: contain !important;
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.1) !important;
+}
+
+.nav-link {
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.95rem !important;
+    color: var(--header-text-color) !important;
+    font-weight: 600 !important;
+    margin: 0 0.5rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: 25px !important;
+}
+
+.nav-link:hover {
+    color: var(--header-hover-color) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Body padding adjustment for fixed navbar */
+body {
+    padding-top: 65px !important;
+    background-color: var(--body-bg-color) !important;
+}
+
+/* Mobile responsive optimizations - Bootstrap mobile-first approach */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.25rem 0 !important;
+        min-height: 45px !important;
+    }
+    
+    .navbar-brand img {
+        height: 28px !important;
+    }
+    
+    body {
+        padding-top: 55px !important;
+    }
+    
+    .nav-link {
+        padding: 0.35rem 0.5rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Enhanced Mobile Menu Toggler */
+    .navbar-toggler {
+        padding: 0.2rem 0.4rem !important;
+        font-size: 0.9rem !important;
+        border: none !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .navbar-toggler:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: scale(1.05) !important;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+    }
+    
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        width: 1.5em !important;
+        height: 1.5em !important;
+    }
+    
+    /* Mobile Menu Collapse Enhancement */
+    .navbar-collapse {
+        background: linear-gradient(135deg, rgba(17, 55, 54, 0.98) 0%, rgba(30, 95, 93, 0.98) 100%) !important;
+        backdrop-filter: blur(15px) !important;
+        border-radius: 15px !important;
+        margin-top: 10px !important;
+        padding: 1rem !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar-nav {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .nav-item {
+        margin: 0.3rem 0 !important;
+        width: 100% !important;
+    }
+    
+    .nav-link {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.8rem 1rem !important;
+        margin: 0 !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        transition: all 0.3s ease !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+    
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    .nav-link.active {
+        background: linear-gradient(135deg, #1e5f5d, #113736) !important;
+        color: #dfeade !important;
+        box-shadow: 0 5px 15px rgba(30, 95, 93, 0.3) !important;
+    }
+    
+    .nav-link i {
+        font-size: 1.1rem !important;
+        margin-right: 0.5rem !important;
+        width: 20px !important;
+        text-align: center !important;
+    }
+    
+    /* Dropdown menu mobile optimizations */
+    .dropdown-menu {
+        margin-top: 0.3rem !important;
+        padding: 0.3rem 0 !important;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Extra small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0.25rem 0 !important;
+        min-height: 45px !important;
+    }
+    
+    .navbar-brand img {
+        height: 28px !important;
+    }
+    
+    body {
+        padding-top: 55px !important;
+    }
+    
+    .nav-link {
+        padding: 0.3rem 0.5rem !important;
+        font-size: 0.85rem !important;
+    }
+    
+    /* Extra Small Mobile Menu */
+    .navbar-collapse {
+        margin-top: 8px !important;
+        padding: 0.8rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .nav-link {
+        padding: 0.7rem 0.8rem !important;
+        font-size: 0.95rem !important;
+        margin: 0.2rem 0 !important;
+    }
+    
+    .nav-link i {
+        font-size: 1rem !important;
+        margin-right: 0.4rem !important;
+        width: 18px !important;
+    }
+    
+    .navbar-toggler {
+        padding: 0.3rem !important;
+    }
+    
+    .navbar-toggler-icon {
+        width: 1.3em !important;
+        height: 1.3em !important;
+    }
+    
+    .container, .container-fluid {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+}
+
+/* Large devices (desktops, 992px and up) - Enhanced spacing */
+@media (min-width: 992px) {
+    .navbar {
+        padding: 0.6rem 0 !important;
+        min-height: 65px !important;
+    }
+    
+    .navbar-brand img {
+        height: 38px !important;
+    }
+    
+    body {
+        padding-top: 75px !important;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 1rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+/* Admin panel specific optimizations */
+.admin-header .sidebar-header {
+    padding: 1.2rem 1rem !important;
+}
+
+.admin-header .sidebar-header h4 {
+    font-size: 1.1rem !important;
+}
+
+.admin-header .sidebar-nav {
+    padding: 0.8rem 0 !important;
+}
+
+@media (max-width: 768px) {
+    .admin-header .sidebar-header {
+        padding: 1rem 0.8rem !important;
+    }
+    
+    .admin-header .sidebar-header h4 {
+        font-size: 1rem !important;
+    }
+    
+    .admin-header .sidebar-nav {
+        padding: 0.6rem 0 !important;
+    }
+}
+
+/* Utility classes for responsive header management */
+.header-compact {
+    min-height: 50px !important;
+}
+
+.header-minimal {
+    min-height: 45px !important;
+}
+
+.logo-small {
+    height: 30px !important;
+}
+
+.logo-minimal {
+    height: 25px !important;
+}
+
+/* Performance optimizations */
+.navbar, .navbar-brand, .nav-link {
+    will-change: transform;
+}
+
+/* Accessibility improvements for smaller headers */
+@media (max-width: 576px) {
+    .nav-link, .dropdown-item {
+        min-height: 44px !important; /* Touch target minimum */
+        display: flex !important;
+        align-items: center !important;
+    }
+}

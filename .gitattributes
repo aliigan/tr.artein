@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arte in Manifestosu | Arte in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        @font-face {
+            font-family: 'MiLANO SANS REGULAR';
+            src: url('assets/webfonts/MilanoSans-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Montserrat Semi Bold';
+            src: url('assets/webfonts/Montserrat-SemiBold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Montserrat Semi Bold', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+
+        .manifesto-section {
+            padding: 120px 0 60px;
+        }
+
+        .manifesto-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+
+        .manifesto-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .manifesto-paragraph {
+            margin-bottom: 3rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .manifesto-paragraph:hover {
+            transform: translateY(-5px);
+        }
+
+        .manifesto-image-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .manifesto-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+        }
+
+        .manifesto-paragraph:hover .manifesto-image {
+            transform: scale(1.05);
+        }
+
+        .manifesto-text {
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-family: 'MiLANO SANS REGULAR', sans-serif;
+            position: relative;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #113736;
+            border-radius: 2px;
+        }
+
+        .manifesto-text p {
+            margin-bottom: 0;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-family: 'Montserrat Semi Bold', sans-serif;
+        }
+
+        .manifesto-section p {
+            font-family: 'Montserrat Semi Bold', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .manifesto-title {
+                font-size: 2.5rem;
+            }
+            
+            .manifesto-image-container {
+                height: 200px;
+            }
+
+            .manifesto-text {
+                padding: 1.5rem;
+            }
+        }
+
+        .navbar {
+            background-color: #113736 !important;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: color 0.3s;
+            font-family: 'MiLANO SANS REGULAR', sans-serif;
+        }
+
+        .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+
+        .dropdown-menu {
+            background-color: #113736;
+            border: none;
+        }
+
+        .dropdown-item {
+            color: #fff;
+            font-family: 'MiLANO SANS REGULAR', sans-serif;
+        }
+
+        .dropdown-item:hover {
+            background-color: #0a2524;
+            color: #fff;
+        }
+
+        .footer {
+            background-color: #113736 !important;
+            padding: 3rem 0;
+        }
+        .footer-logo {
+            margin-bottom: 1.5rem;
+        }
+        .footer-logo img {
+            height: 60px;
+        }
+        .footer-contact {
+            margin-bottom: 2rem;
+        }
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .footer-contact i {
+            margin-right: 0.5rem;
+            color: #fff;
+        }
+        .social-links {
+            margin-top: 1.5rem;
+        }
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #f8f9fa;
+        }
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .footer-bottom p {
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Image loading animation */
+        .manifesto-image {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        hr {
+            border-color: #113736 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/images/ArteIn_logos-04.png" alt="ArteIn Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Hakkımızda
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="bizkimiz.html">Hakkımızda</a></li>
+                            <li><a class="dropdown-item" href="manifesto.html">Arte in Manifestosu</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Hizmetler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#projects">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">İletişim</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Manifesto Section -->
+    <section class="manifesto-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h1 class="manifesto-title text-center" data-aos="fade-down">ARTE IN MANİFESTOSU</h1>
+                    
+                    <div class="manifesto-content">
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/about.jpg" alt="Sanat ve Mühendislik" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Sanat ve Mühendisliğin Buluşması</h3>
+                                <p>İnşaat bir sanat, mühendislik ise bu sanatın temelidir. Biz Arte in olarak, yalnızca yapılar inşa etmiyor, aynı zamanda estetik ve mühendisliği kusursuz bir dengede buluşturarak geleceğe iz bırakıyoruz.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/project1.jpg" alt="Kalite ve Mükemmellik" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Kalite ve Mükemmellik</h3>
+                                <p>Kalite, en sağlam temelimizdir. Yaptığımız her iş, mükemmelliği hedefleyen bir titizlikle şekillenir. Malzemeden işçiliğe, tasarımdan uygulamaya kadar her aşamada kaliteyi vazgeçilmez bir ilke olarak benimsiyoruz.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/project2.jpg" alt="Sürdürülebilir Gelecek" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Sürdürülebilir Gelecek</h3>
+                                <p>Sürdürülebilirlik, geleceğe duyduğumuz sorumluluktur. Doğaya zarar veren değil, onunla birlikte var olan yapılar üretiyoruz. Kaynakları bilinçli kullanarak, zamana direnecek çözümler üretiyoruz.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/project3.jpg" alt="Yenilikçi Yaklaşım" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Yenilikçi Yaklaşım</h3>
+                                <p>Yenilik, ezberleri bozma cesareti, bizi ileriye taşıyan gücümüzdür. Sıradan olanı tekrar etmeyiz. Teknoloji, mühendislik ve sanatı aynı masaya koyarak, özgün fikirler üretiyoruz. Yeni olanı keşfetmek, kalıpları kırmak bizim için bir seçenek değil, zorunluluktur.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/slider1.jpg" alt="Akılcı Çözümler" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Akılcı Çözümler</h3>
+                                <p>Akılcılık, sağlam bir mühendislik yaklaşımıyla hareket etmemizi sağlar. Gerçekçi olmayan hiçbir tasarımın arkasında durmayız. Güzel ama işlevsiz bir yapı bizim için başarısızlıktır. Verimli, sağlam ve insan hayatına değer katan çözümler üretmek önceliğimizdir.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/slider2.jpg" alt="Güven ve Şeffaflık" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Güven ve Şeffaflık</h3>
+                                <p>Güven, işimizin en temel değeridir. Müşterilerimize, iş ortaklarımıza ve çalışanlarımıza karşı şeffaf, dürüst ve sorumluluk sahibi bir anlayışla hareket ederiz. Güven inşa etmenin, bina inşa etmek kadar önemli olduğuna inanırız.</p>
+                            </div>
+                        </div>
+
+                        <div class="manifesto-paragraph" data-aos="fade-up">
+                            <div class="manifesto-image-container">
+                                <img src="assets/images/slider3.jpg" alt="Arte in Felsefesi" class="manifesto-image">
+                            </div>
+                            <div class="manifesto-text">
+                                <h3 class="section-title">Arte in Felsefesi</h3>
+                                <p>Biz Arte in olarak, projelerimize sadece beton ve çelikle değil, bir bakış açısıyla hayat veriyoruz. Çünkü bizim için inşaat, sanattan bağımsız düşünülemez. Şehirleri güzelleştiren, insan hayatına dokunan, yıllara meydan okuyan yapılar üretmek bizim işimiz. Ve biz işimizi ciddiye alıyoruz.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4" style="background-color: #113736;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="assets/images/ArteIn_logos-04.png" alt="ArteIn Logo" height="60">
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1AGWXTzd1A/?mibextid=wwXIfr" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/artein.tr?igsh=cDB3eHF1YWV5OHBm" class="text-white me-3" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/905332752252" target="_blank" class="text-white"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <hr class="border-secondary">
+                    <p class="mb-0 text-white-50">© 2025 Artein. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: true
+        });
+    </script>
+</body>
+</html> 

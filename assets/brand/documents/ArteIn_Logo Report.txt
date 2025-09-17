@@ -1,0 +1,42 @@
+Package Report
+
+-----------------------------------------------------------------------------
+Document:
+Name: ArteIn_Logo.ai
+Color Mode: CMYK color
+Color Profile: none
+Ruler Units: pixels
+Artboard Dimensions: 1920 px x 1080 px
+Show Images in Outline Mode: OFF
+Highlight Substituted Fonts: OFF
+Highlight Substituted Glyphs: OFF
+Preserve Text Editability
+Simulate Colored Paper: OFF
+
+-----------------------------------------------------------------------------
+Spot Color Objects:
+
+-----------------------------------------------------------------------------
+Missing Fonts:NONE
+
+-----------------------------------------------------------------------------
+Protected Fonts that were not packaged:NONE
+
+-----------------------------------------------------------------------------
+Fonts:
+Montserrat Regular (TrueType)
+Montserrat Medium (TrueType)
+Montserrat SemiBold (TrueType)
+Milano Sans Regular (OTF)
+
+-----------------------------------------------------------------------------
+Embedded Fonts:
+NONE
+
+-----------------------------------------------------------------------------
+Missing Links:
+NONE
+
+-----------------------------------------------------------------------------
+Linked Images:
+NONE

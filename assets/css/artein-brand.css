@@ -1,0 +1,310 @@
+/* ArteIn Brand Guidelines - Font Definitions */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../webfonts/Montserrat-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../webfonts/Montserrat-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../webfonts/Montserrat-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Milano Sans';
+    src: url('../webfonts/MilanoSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ArteIn Brand Color Palette - Brand Guide Güncellemesi */
+:root {
+    /* Ana Brand Renkleri (Brand Guide'dan) */
+    --artein-light: #dfeade;     /* Ana açık renk */
+    --artein-dark: #113736;      /* Ana koyu yeşil */
+    --artein-black: #010101;     /* Siyah */
+    --artein-white: #FFFFFF;     /* Beyaz */
+    
+    /* Eski renkler (uyumluluk için) */
+    --artein-red: #ED1C24;
+    --artein-red-dark: #C1272D;
+    --artein-orange: #F1921E;
+    --artein-orange-light: #F7931E;
+    --artein-yellow: #FCEE21;
+    --artein-green: #39B548;
+    --artein-green-dark: #009245;
+    --artein-blue: #3FABE2;
+    --artein-blue-dark: #0071BC;
+    --artein-purple: #9B2D91;
+    
+    /* Construction Theme Colors */
+    --construction-orange: #FF8C00;
+    --construction-yellow: #FFD700;
+    --construction-red: #DC143C;
+    
+    /* Neutral Grays */
+    --artein-gray-100: #F2F2F2;
+    --artein-gray-200: #E6E6E6;
+    --artein-gray-300: #CCCCCC;
+    --artein-gray-400: #999999;
+    --artein-gray-500: #666666;
+    --artein-gray-600: #4D4D4D;
+    --artein-gray-700: #333333;
+    --artein-gray-800: #1A1A1A;
+    --artein-gray-900: #000000;
+    
+    /* Typography */
+    --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Milano Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Font Weights */
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(26, 26, 26, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(26, 26, 26, 0.1), 0 2px 4px -1px rgba(26, 26, 26, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(26, 26, 26, 0.1), 0 4px 6px -2px rgba(26, 26, 26, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(26, 26, 26, 0.1), 0 10px 10px -5px rgba(26, 26, 26, 0.04);
+}
+
+/* Base Typography - Force ArteIn Fonts (Font Awesome Hariç) */
+body {
+    font-family: var(--font-primary) !important;
+    color: var(--artein-gray-800);
+    line-height: 1.6;
+}
+
+/* Universal font override - Font Awesome ikonları hariç */
+*:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat), 
+*:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat)::before, 
+*:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat)::after {
+    font-family: var(--font-primary) !important;
+}
+
+/* Font Awesome İkonları Korunması */
+.fa, .fas, .far, .fab, .fal, .fad, .fat,
+i.fa, i.fas, i.far, i.fab, i.fal, i.fad, i.fat,
+[class^="fa-"], [class*=" fa-"],
+i[class^="fa-"], i[class*=" fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands", "FontAwesome" !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary) !important;
+    font-weight: var(--fw-semibold) !important;
+    color: var(--artein-black);
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: var(--fw-semibold);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: var(--fw-semibold);
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: var(--fw-medium);
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: var(--fw-medium);
+}
+
+/* Display Text (for hero sections) */
+.display-text {
+    font-family: var(--font-display) !important;
+    font-size: 3.5rem;
+    font-weight: var(--fw-regular) !important;
+    line-height: 1.1;
+}
+
+/* Navbar brand specific */
+.navbar-brand {
+    font-family: var(--font-display) !important;
+}
+
+/* Page titles */
+.page-title, .section-title {
+    font-family: var(--font-display) !important;
+}
+
+/* Brand Button Styles - Brand Guide Güncellemesi */
+.btn-artein-primary {
+    background: var(--artein-dark);
+    color: var(--artein-white);
+    border: none;
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    font-family: var(--font-primary);
+    font-weight: var(--fw-medium);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-artein-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: var(--artein-black);
+    color: var(--artein-white);
+    text-decoration: none;
+}
+
+.btn-artein-secondary {
+    background: transparent;
+    color: var(--artein-dark);
+    border: 2px solid var(--artein-dark);
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    font-family: var(--font-primary);
+    font-weight: var(--fw-medium);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all 0.3s ease;
+}
+
+.btn-artein-secondary:hover {
+    background: var(--artein-dark);
+    color: var(--artein-white);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Logo Styles */
+.artein-logo {
+    max-height: 45px;
+    width: auto;
+    transition: all 0.3s ease;
+    object-fit: contain;
+}
+
+.artein-logo:hover {
+    transform: scale(1.05);
+}
+
+.artein-logo-large {
+    max-height: 80px;
+    width: auto;
+}
+
+/* Brand Cards */
+.artein-card {
+    background: var(--artein-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    border: 1px solid var(--artein-gray-200);
+}
+
+.artein-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Brand Colors Utility Classes */
+.bg-artein-orange { background-color: var(--artein-orange); }
+.bg-artein-red { background-color: var(--artein-red); }
+.bg-artein-blue { background-color: var(--artein-blue); }
+.bg-artein-green { background-color: var(--artein-green); }
+.bg-artein-black { background-color: var(--artein-black); }
+.bg-artein-white { background-color: var(--artein-white); }
+
+.text-artein-orange { color: var(--artein-orange); }
+.text-artein-red { color: var(--artein-red); }
+.text-artein-blue { color: var(--artein-blue); }
+.text-artein-green { color: var(--artein-green); }
+.text-artein-black { color: var(--artein-black); }
+.text-artein-white { color: var(--artein-white); }
+
+/* Construction Theme Elements */
+.construction-accent {
+    position: relative;
+}
+
+.construction-accent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--artein-orange), var(--construction-orange));
+    border-radius: 2px;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    .display-text {
+        font-size: 2.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.75rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .display-text {
+        font-size: 2rem;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+}
