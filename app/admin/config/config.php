@@ -17,10 +17,10 @@ ini_set('session.cookie_secure', 0); // HTTPS için 1 yapın
 ini_set('session.use_strict_mode', 1);
 
 // Site ayarları
-define('SITE_URL', 'http://localhost/buildtech-main/app/frontend/index.php'); 
-define('ADMIN_URL', SITE_URL . '/admin');
-define('UPLOAD_PATH', __DIR__ . '/../../assets/uploads/');
-define('UPLOAD_URL', SITE_URL . '/assets/uploads/');
+define('SITE_URL', 'http://localhost/tr.artein');
+define('ADMIN_URL', SITE_URL . '/app/admin');
+define('UPLOAD_PATH', __DIR__ . '/../../../assets/uploads/');
+define('UPLOAD_URL', SITE_URL . '/assets/uploads');
 define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
 
 // Güvenlik ayarları
