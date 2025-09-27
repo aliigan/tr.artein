@@ -143,13 +143,13 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
             font-family: var(--font-primary, 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif) !important;
         }
         
-        /* Display Font için Milano Sans */
+        /* Display Font Milano Sans */
         .display-text, .page-title, .section-title, 
         .hero-title, .brand-title {
             font-family: var(--font-display, 'Milano Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif) !important;
         }
 
-        /* Başlıklar (h1-h6) Milano Sans Regular */
+        /* Başlıklar (h1-h6) Milano Sans */
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-display, 'Milano Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif) !important;
             font-weight: 400 !important;
@@ -225,6 +225,21 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
             line-height: 1 !important;
         }
         
+        /* Social Link Container Styles - Override */
+        .social-link {
+            background: var(--artein-dark) !important;
+            border: 2px solid #fff !important;
+        }
+        
+        .social-link:hover {
+            background: #fff !important;
+            color: var(--artein-dark) !important;
+        }
+        
+        .social-link:hover i {
+            color: var(--artein-dark) !important;
+        }
+        
         /* Button İconları */
         .btn i, .filter-btn i, .view-btn i, .page-link i {
             font-weight: 900 !important;
@@ -294,8 +309,8 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
         }
 
         :root {
-            --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --font-display: 'Milano Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-primary: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-display: 'Montserrat', 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --navbar-height: 65px;
         }
 

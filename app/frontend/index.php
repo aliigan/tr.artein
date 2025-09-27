@@ -177,6 +177,8 @@ include 'includes/header.php';
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            background: var(--artein-dark);
+            border: 2px solid #fff;
         }
         .social-link::before {
             content: '';
@@ -189,17 +191,22 @@ include 'includes/header.php';
             transition: all 0.3s ease;
         }
         .social-link.facebook {
-            background: linear-gradient(135deg, #1877f2, #42a5f5);
+            background: var(--artein-dark);
+            border: 2px solid #fff;
         }
         .social-link.whatsapp {
-            background: linear-gradient(135deg, #25d366, #128c7e);
+            background: var(--artein-dark);
+            border: 2px solid #fff;
         }
         .social-link.instagram {
-            background: linear-gradient(135deg, #e4405f, #fd1d1d, #fcb045);
+            background: var(--artein-dark);
+            border: 2px solid #fff;
         }
         .social-link:hover {
             transform: translateY(-3px) scale(1.1);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background: #fff;
+            color: var(--artein-dark);
         }
         .social-link:hover::before {
             background: rgba(255, 255, 255, 0.1);

@@ -701,4 +701,3 @@ include 'includes/header.php';
 // Footer'ı include et
 include 'includes/footer.php';
 ?>
-?>

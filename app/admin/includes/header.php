@@ -28,6 +28,7 @@ if (!defined('ADMIN_PANEL')) {
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     
     <style>
+
         :root {
             --primary-color: #113736;
             --secondary-color: #dfeade;
@@ -50,6 +51,17 @@ if (!defined('ADMIN_PANEL')) {
             margin: 0;
             padding: 0;
             line-height: 1.6;
+        }
+
+        /* Headings default */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: inherit;
+            font-weight: 700;
+        }
+
+        /* Inherit default font for UI elements */
+        .nav-link, .btn, .form-control, .form-select, .form-label, .breadcrumb, .dropdown-item, small, label, input, select, textarea {
+            font-family: inherit;
         }
         
         /* Modern Sidebar */
@@ -98,6 +110,7 @@ if (!defined('ADMIN_PANEL')) {
             font-weight: 700;
             font-size: 1.4rem;
             letter-spacing: -0.5px;
+            
         }
         
         .sidebar-header small {
@@ -124,6 +137,7 @@ if (!defined('ADMIN_PANEL')) {
             letter-spacing: 1px;
             color: rgba(255,255,255,0.6);
             margin-bottom: 0.5rem;
+            
         }
         
         .nav-item {
@@ -232,6 +246,7 @@ if (!defined('ADMIN_PANEL')) {
         .card-header h5 {
             margin: 0;
             font-size: 1.1rem;
+            font-weight: 600;
         }
         
         .card-body {
