@@ -89,8 +89,7 @@ if (isset($_GET['timeout'])) {
         }
         
         body {
-            background: linear-gradient(135deg, rgba(17, 55, 54, 0.9), rgba(30, 95, 93, 0.8)), 
-                        url('../../assets/brand/logos/ArteIn_logos-02.png');
+            background: linear-gradient(135deg, rgba(17, 55, 54, 0.9), rgba(30, 95, 93, 0.8));
             background-size: contain;
             background-position: center center;
             background-repeat: no-repeat;
@@ -292,11 +291,11 @@ if (isset($_GET['timeout'])) {
                     $logoPath = function_exists('getSetting') ? getSetting('logo') : null;
                     if ($logoPath && file_exists($logoPath)): ?>
                         <img src="<?= escape($logoPath) ?>" alt="Arte In">
-                    <?php elseif (file_exists('../../assets/brand/logos/ArteIn_logos-04.png')): ?>
-                        <img src="../../assets/brand/logos/ArteIn_logos-04.png" alt="Arte In">
+                    <?php elseif (file_exists('../../assets/brand/logos/ArteIn_logos-07.png')): ?>
+                        <img src="../../assets/brand/logos/ArteIn_logos-07.png" alt="Arte In">
                     <?php endif; ?>
                 </div>
-                <h4 class="mb-0">Arte In Construction</h4>
+
                 <small>Admin Paneli</small>
             </div>
         </div>
