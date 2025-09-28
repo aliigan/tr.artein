@@ -101,7 +101,7 @@ $pageSpecificStyles = '
         /* Content Section */
         .content-section {
             padding: 100px 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #dfeade 0%, #c8d5c6 100%);
         }
 
         /* Statistics Section */
