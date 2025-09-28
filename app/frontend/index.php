@@ -233,7 +233,7 @@ include 'includes/header.php';
                                 <p class="lead"><?= escape($slider['subtitle']) ?></p>
                             <?php endif; ?>
                             <?php if ($slider['button_text'] && $slider['button_link']): ?>
-                                <a href="<?= escape($slider['button_link']) ?>" class="btn btn-lg mt-3">
+                                <a href="<?= escape($slider['button_link']) ?>" class="btn-artein-primary btn-lg mt-3">
                                     <?= escape($slider['button_text']) ?>
                                 </a>
                             <?php endif; ?>
