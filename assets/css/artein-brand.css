@@ -68,8 +68,8 @@
     --artein-gray-900: #000000;
     
     /* Typography */
-    --font-primary: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Montserrat', 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     
     /* Font Weights */
     --fw-regular: 400;
@@ -100,7 +100,7 @@
 
 /* Base Typography - Force ArteIn Fonts (Font Awesome Hariç) */
 body {
-    font-family: var(--font-primary) !important;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     color: var(--artein-gray-800);
     line-height: 1.6;
 }
@@ -109,7 +109,7 @@ body {
 *:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat), 
 *:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat)::before, 
 *:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(.fal):not(.fad):not(.fat)::after {
-    font-family: var(--font-primary) !important;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 /* Font Awesome İkonları Korunması */
@@ -122,7 +122,7 @@ i[class^="fa-"], i[class*=" fa-"] {
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-primary) !important;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     font-weight: var(--fw-semibold) !important;
     color: var(--artein-black);
     line-height: 1.2;
@@ -150,7 +150,7 @@ h4 {
 
 /* Display Text (for hero sections) */
 .display-text {
-    font-family: var(--font-display) !important;
+    font-family: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     font-size: 3.5rem;
     font-weight: var(--fw-regular) !important;
     line-height: 1.1;
@@ -158,12 +158,58 @@ h4 {
 
 /* Navbar brand specific */
 .navbar-brand {
-    font-family: var(--font-display) !important;
+    font-family: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Navigation and Menu Items */
+.navbar-nav .nav-link,
+.navbar-nav .nav-item,
+.navbar-nav a,
+.navbar a,
+.nav a,
+.menu-item,
+.menu-link {
+    font-family: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Buttons */
+.btn,
+button,
+input[type="submit"],
+input[type="button"],
+a.btn,
+.carousel-caption .btn {
+    font-family: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 /* Page titles */
 .page-title, .section-title {
-    font-family: var(--font-display) !important;
+    font-family: 'Milano Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Body text and paragraphs */
+p,
+.lead,
+.text,
+.content,
+.description,
+.paragraph,
+.body-text,
+.content-text {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Form elements */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea,
+select,
+.form-control,
+.form-group input,
+.form-group textarea {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 /* Brand Button Styles - Brand Guide Güncellemesi */

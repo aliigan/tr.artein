@@ -58,7 +58,7 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
     <link rel="preload" href="../../assets/webfonts/MilanoSans-Regular.ttf" as="font" type="font/ttf" crossorigin>
     
     <!-- Brand CSS (fontları tanımla) -->
-    <link rel="stylesheet" href="../../assets/css/artein-brand.css">
+    <link rel="stylesheet" href="../../assets/css/artein-brand.css?v=<?= time() ?>">
     
     <!-- Font Awesome 6.5.1 (brand CSS'ten sonra) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -270,10 +270,10 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
     </style>
     
     <!-- Ana CSS Dosyaları (sıralı yükleme) -->
-    <link rel="stylesheet" href="../../assets/css/common.css">
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/responsive-header.css">
+    <link rel="stylesheet" href="../../assets/css/common.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../../assets/css/main.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../../assets/css/responsive-header.css?v=<?= time() ?>">
     <style>
         /* Brand Font Definitions - Optimize edilmiş */
         @font-face {
