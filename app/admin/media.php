@@ -145,6 +145,8 @@ $fileTypes = $database->fetchAll("SELECT DISTINCT file_type FROM media_files WHE
 include 'includes/header.php';
 ?>
 
+<?= displayMessages() ?>
+
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="fas fa-photo-video me-2"></i>Medya Galerisi</h5>

@@ -604,4 +604,9 @@ if (!defined('ADMIN_PANEL')) {
                         sidebar.classList.remove('mobile-open');
                     }
                 });
+                
+                // Delete confirmation function
+                function confirmDelete(message) {
+                    return confirm(message || 'Bu öğeyi silmek istediğinizden emin misiniz?');
+                }
             </script>

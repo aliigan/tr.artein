@@ -44,9 +44,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($upload['success']) {
                             $background_image = $upload['path'];
                         } else {
-                            setErrorMessage($upload['message']);
+                            setErrorMessage('Resim yükleme hatası: ' . $upload['message']);
                             break;
                         }
+                    } elseif (isset($_FILES['background_image']) && $_FILES['background_image']['error'] !== UPLOAD_ERR_NO_FILE) {
+                        // Upload hatası var
+                        $error_messages = [
+                            UPLOAD_ERR_INI_SIZE => 'Dosya boyutu çok büyük (PHP limiti: ' . ini_get('upload_max_filesize') . ')',
+                            UPLOAD_ERR_FORM_SIZE => 'Dosya boyutu çok büyük (Form limiti)',
+                            UPLOAD_ERR_PARTIAL => 'Dosya kısmen yüklendi',
+                            UPLOAD_ERR_NO_TMP_DIR => 'Geçici klasör bulunamadı',
+                            UPLOAD_ERR_CANT_WRITE => 'Dosya yazılamadı',
+                            UPLOAD_ERR_EXTENSION => 'Dosya yükleme uzantı tarafından durduruldu'
+                        ];
+                        $error_msg = $error_messages[$_FILES['background_image']['error']] ?? 'Bilinmeyen yükleme hatası';
+                        setErrorMessage('Resim yükleme hatası: ' . $error_msg);
+                        break;
                     }
                     
                     $sql = "INSERT INTO sliders (title, subtitle, button_text, button_link, background_image, order_index, is_active) 
@@ -54,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if ($database->execute($sql, [$title, $subtitle, $button_text, $button_link, $background_image, $order_index, $is_active])) {
                         setSuccessMessage('Slider başarıyla eklendi.');
-                        header('Location: sliders.php');
+                        header('Location: sliders.php?action=list');
                         exit;
                     } else {
                         setErrorMessage('Slider eklenirken hata oluştu.');
@@ -92,9 +105,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                             $background_image = $upload['path'];
                         } else {
-                            setErrorMessage($upload['message']);
+                            setErrorMessage('Resim yükleme hatası: ' . $upload['message']);
                             break;
                         }
+                    } elseif (isset($_FILES['background_image']) && $_FILES['background_image']['error'] !== UPLOAD_ERR_NO_FILE) {
+                        // Upload hatası var
+                        $error_messages = [
+                            UPLOAD_ERR_INI_SIZE => 'Dosya boyutu çok büyük (PHP limiti: ' . ini_get('upload_max_filesize') . ')',
+                            UPLOAD_ERR_FORM_SIZE => 'Dosya boyutu çok büyük (Form limiti)',
+                            UPLOAD_ERR_PARTIAL => 'Dosya kısmen yüklendi',
+                            UPLOAD_ERR_NO_TMP_DIR => 'Geçici klasör bulunamadı',
+                            UPLOAD_ERR_CANT_WRITE => 'Dosya yazılamadı',
+                            UPLOAD_ERR_EXTENSION => 'Dosya yükleme uzantı tarafından durduruldu'
+                        ];
+                        $error_msg = $error_messages[$_FILES['background_image']['error']] ?? 'Bilinmeyen yükleme hatası';
+                        setErrorMessage('Resim yükleme hatası: ' . $error_msg);
+                        break;
                     }
                     
                     $sql = "UPDATE sliders SET title = ?, subtitle = ?, button_text = ?, button_link = ?, 
@@ -102,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if ($database->execute($sql, [$title, $subtitle, $button_text, $button_link, $background_image, $order_index, $is_active, $id])) {
                         setSuccessMessage('Slider başarıyla güncellendi.');
-                        header('Location: sliders.php');
+                        header('Location: sliders.php?action=list');
                         exit;
                     } else {
                         setErrorMessage('Slider güncellenirken hata oluştu.');
@@ -126,11 +152,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     setErrorMessage('Slider bulunamadı.');
                 }
-                header('Location: sliders.php');
+                header('Location: sliders.php?action=list');
                 exit;
                 break;
         }
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'delete') {
+    // GET request ile silme işlemi
+    $slider = $database->fetchOne("SELECT * FROM sliders WHERE id = ?", [$id]);
+    if ($slider) {
+        // Resmi sil
+        if ($slider['background_image'] && file_exists($slider['background_image'])) {
+            unlink($slider['background_image']);
+        }
+        
+        if ($database->execute("DELETE FROM sliders WHERE id = ?", [$id])) {
+            setSuccessMessage('Slider başarıyla silindi.');
+        } else {
+            setErrorMessage('Slider silinirken hata oluştu.');
+        }
+    } else {
+        setErrorMessage('Slider bulunamadı.');
+    }
+    header('Location: sliders.php?action=list');
+    exit;
 }
 
 // Sayfa içeriği
@@ -142,7 +187,7 @@ switch ($action) {
         $slider = $database->fetchOne("SELECT * FROM sliders WHERE id = ?", [$id]);
         if (!$slider) {
             setErrorMessage('Slider bulunamadı.');
-            header('Location: sliders.php');
+            header('Location: sliders.php?action=list');
             exit;
         }
         $breadcrumb[] = ['title' => 'Slider Düzenle'];
@@ -157,6 +202,7 @@ include 'includes/header.php';
 
 <?php if ($action === 'list'): ?>
     <!-- Slider Listesi -->
+    <?= displayMessages() ?>
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-images me-2"></i>Slider Listesi</h5>
@@ -244,6 +290,7 @@ include 'includes/header.php';
 
 <?php else: ?>
     <!-- Slider Ekleme/Düzenleme Formu -->
+    <?= displayMessages() ?>
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">

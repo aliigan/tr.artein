@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                         
                         setSuccessMessage('Proje başarıyla eklendi.');
-                        header('Location: projects.php');
+                        header('Location: projects.php?action=list');
                         exit;
                     } else {
                         setErrorMessage('Proje eklenirken hata oluştu.');
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                         
                         setSuccessMessage('Proje başarıyla güncellendi.');
-                        header('Location: projects.php');
+                        header('Location: projects.php?action=list');
                         exit;
                     } else {
                         setErrorMessage('Proje güncellenirken hata oluştu.');
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     setErrorMessage('Proje bulunamadı.');
                 }
-                header('Location: projects.php');
+                header('Location: projects.php?action=list');
                 exit;
                 break;
                 
@@ -246,6 +246,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
         }
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'delete') {
+    // GET request ile silme işlemi
+    $project = $database->fetchOne("SELECT * FROM projects WHERE id = ?", [$id]);
+    if ($project) {
+        // Ana resmi sil
+        if ($project['featured_image'] && file_exists($project['featured_image'])) {
+            unlink($project['featured_image']);
+        }
+        
+        // Proje resimlerini sil
+        $projectImages = $database->fetchAll("SELECT * FROM project_images WHERE project_id = ?", [$id]);
+        foreach ($projectImages as $image) {
+            if (file_exists($image['image_path'])) {
+                unlink($image['image_path']);
+            }
+        }
+        
+        // Veritabanından sil
+        $database->execute("DELETE FROM project_images WHERE project_id = ?", [$id]);
+        
+        if ($database->execute("DELETE FROM projects WHERE id = ?", [$id])) {
+            setSuccessMessage('Proje başarıyla silindi.');
+        } else {
+            setErrorMessage('Proje silinirken hata oluştu.');
+        }
+    } else {
+        setErrorMessage('Proje bulunamadı.');
+    }
+    header('Location: projects.php?action=list');
+    exit;
 }
 
 // Sayfa içeriği
@@ -301,6 +331,7 @@ include 'includes/header.php';
 
 <?php if ($action === 'list'): ?>
     <!-- Proje Listesi -->
+    <?= displayMessages() ?>
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-project-diagram me-2"></i>Proje Listesi</h5>
@@ -439,6 +470,7 @@ include 'includes/header.php';
 
 <?php else: ?>
     <!-- Proje Ekleme/Düzenleme Formu -->
+    <?= displayMessages() ?>
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">

@@ -48,6 +48,8 @@ foreach ($settingsData as $setting) {
 include 'includes/header.php';
 ?>
 
+<?= displayMessages() ?>
+
 <form method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
     
