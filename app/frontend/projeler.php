@@ -409,6 +409,7 @@ $pageSpecificStyles = '
             }
             
             .breadcrumb-section {
+                background: #dfeade !important;
                 padding: 12px 0;
             }
             

@@ -132,8 +132,8 @@
    ======================================== */
 
 .breadcrumb-section {
-    background: #f8f9fa;
-    padding: 12px 0;
+    background: #dfeade !important;
+    padding: 12px 0 !important;
     border-bottom: 1px solid rgba(17, 55, 54, 0.1);
 }
 
@@ -149,25 +149,25 @@
 }
 
 .breadcrumb-item a {
-    color: #113736;
+    color: #010101;
     text-decoration: none;
     transition: color 0.3s ease;
     font-family: var(--font-primary) !important;
 }
 
 .breadcrumb-item a:hover {
-    color: #1e5f5d;
+    color: #113736;
     text-decoration: underline;
 }
 
 .breadcrumb-item.active {
-    color: #666;
+    color: #010101;
     font-weight: 600;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
     content: "›";
-    color: #999;
+    color: #010101;
     font-weight: 600;
 }
 

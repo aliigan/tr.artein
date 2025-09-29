@@ -137,12 +137,12 @@ $pageSpecificStyles = '
         }
 
         .breadcrumb-item a {
-            color: #113736;
+            color: #010101;
             text-decoration: none;
         }
 
         .breadcrumb-item.active {
-            color: #666;
+            color: #010101;
         }
 
         .quote-section {
@@ -166,7 +166,7 @@ $pageSpecificStyles = '
         }
         
         .breadcrumb-section {
-            background: linear-gradient(135deg, rgba(17,55,54,.1), rgba(17,55,54,.2));
+            background: #dfeade !important;
             padding: 16px 0;
             border-bottom: 1px solid #e9ecef33;
         }
@@ -178,12 +178,12 @@ $pageSpecificStyles = '
         }
         
         .breadcrumb-item a {
-            color: #113736;
+            color: #010101;
             text-decoration: none;
         }
         
         .breadcrumb-item.active {
-            color: #666;
+            color: #010101;
         }
 ';
 
