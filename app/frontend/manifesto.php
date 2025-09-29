@@ -89,20 +89,6 @@ $pageSpecificStyles = '
             text-align: justify;
         }
 
-        .manifesto-highlight {
-            background: linear-gradient(120deg, #113736 0%, #0a2524 100%);
-            color: white;
-            padding: 3rem;
-            border-radius: 15px;
-            margin: 3rem 0;
-            text-align: center;
-        }
-
-        .manifesto-highlight h3 {
-            font-family: var(--font-display) !important;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
 
         .principles-grid {
             display: grid;
