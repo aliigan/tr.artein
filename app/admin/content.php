@@ -64,6 +64,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     setErrorMessage('İçerik güncellenirken bir hata oluştu.');
                 }
             }
+        } elseif ($content_type === 'manifesto') {
+            $title = trim($_POST['title'] ?? '');
+            $subtitle = trim($_POST['subtitle'] ?? '');
+            $content = trim($_POST['content'] ?? '');
+            $image = trim($_POST['image'] ?? '');
+            
+            // Resim yükleme işlemi
+            if (isset($_FILES['image_upload']) && $_FILES['image_upload']['error'] === UPLOAD_ERR_OK) {
+                $upload_result = uploadFile($_FILES['image_upload'], 'general');
+                if ($upload_result['success']) {
+                    $image = $upload_result['path'];
+                } else {
+                    setErrorMessage('Resim yüklenirken hata: ' . $upload_result['message']);
+                }
+            }
+            
+            if (empty($title)) {
+                setErrorMessage('Başlık alanı zorunludur.');
+            } else {
+                // Mevcut kayıt var mı kontrol et
+                $existing = $database->fetchOne("SELECT id FROM manifesto_content ORDER BY id DESC LIMIT 1");
+                
+                if ($existing) {
+                    // Güncelle
+                    $sql = "UPDATE manifesto_content SET title = ?, subtitle = ?, content = ?, image = ?, updated_at = NOW() WHERE id = ?";
+                    $params = [$title, $subtitle, $content, $image, $existing['id']];
+                } else {
+                    // Yeni ekle
+                    $sql = "INSERT INTO manifesto_content (title, subtitle, content, image) VALUES (?, ?, ?, ?)";
+                    $params = [$title, $subtitle, $content, $image];
+                }
+                
+                if ($database->execute($sql, $params)) {
+                    setSuccessMessage('Manifesto içeriği başarıyla güncellendi.');
+                } else {
+                    setErrorMessage('İçerik güncellenirken bir hata oluştu.');
+                }
+            }
         } elseif ($content_type === 'site_settings') {
             // Site ayarları güncelleme
             $settings = [
@@ -113,6 +151,13 @@ if ($content_type === 'about') {
         'content' => '',
         'image' => ''
     ];
+} elseif ($content_type === 'manifesto') {
+    $manifesto_content = $database->fetchOne("SELECT * FROM manifesto_content ORDER BY id DESC LIMIT 1") ?: [
+        'title' => '',
+        'subtitle' => '',
+        'content' => '',
+        'image' => ''
+    ];
 } elseif ($content_type === 'site_settings') {
     $site_settings = getSiteSettings();
 }
@@ -135,6 +180,10 @@ include 'includes/header.php';
                     <a href="content.php?type=about" 
                        class="btn <?= $content_type === 'about' ? 'btn-primary' : 'btn-outline-primary' ?>">
                         <i class="fas fa-users me-2"></i>Hakkımızda İçeriği
+                    </a>
+                    <a href="content.php?type=manifesto" 
+                       class="btn <?= $content_type === 'manifesto' ? 'btn-primary' : 'btn-outline-primary' ?>">
+                        <i class="fas fa-scroll me-2"></i>Manifesto İçeriği
                     </a>
                     <a href="content.php?type=site_settings" 
                        class="btn <?= $content_type === 'site_settings' ? 'btn-primary' : 'btn-outline-primary' ?>">
@@ -256,6 +305,123 @@ include 'includes/header.php';
                 <small class="text-muted">
                     <strong>Son Güncelleme:</strong><br>
                     <?= formatDate($about_content['updated_at']) ?>
+                </small>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php elseif ($content_type === 'manifesto'): ?>
+<!-- Manifesto İçeriği -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-scroll me-2"></i>Manifesto İçeriği</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Başlık *</label>
+                        <input type="text" class="form-control" name="title" 
+                               value="<?= escape($manifesto_content['title']) ?>" required maxlength="255">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Alt Başlık</label>
+                        <input type="text" class="form-control" name="subtitle" 
+                               value="<?= escape($manifesto_content['subtitle']) ?>" maxlength="500">
+                        <small class="text-muted">Başlık altında görünecek kısa açıklama</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">İçerik</label>
+                        <textarea class="form-control summernote" name="content" rows="10"><?= escape($manifesto_content['content']) ?></textarea>
+                        <small class="text-muted">HTML etiketleri kullanabilirsiniz</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Mevcut Resim</label>
+                        <?php if ($manifesto_content['image']): ?>
+                            <div class="mb-2">
+                                <img src="../../<?= escape($manifesto_content['image']) ?>" alt="Mevcut Resim" 
+                                     class="img-thumbnail" style="max-width: 200px;">
+                            </div>
+                        <?php endif; ?>
+                        <input type="hidden" name="image" value="<?= escape($manifesto_content['image']) ?>">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Yeni Resim Yükle</label>
+                        <input type="file" class="form-control" name="image_upload" accept="image/*">
+                        <small class="text-muted">Desteklenen formatlar: JPG, PNG, GIF, WebP (Maks: 10MB)</small>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
+                        </button>
+                        <a href="<?= SITE_URL ?>/app/frontend/manifesto.php" target="_blank" class="btn btn-outline-secondary">
+                            <i class="fas fa-eye me-2"></i>Önizleme
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Bilgilendirme</h6>
+            </div>
+            <div class="card-body">
+                <h6>Manifesto Düzenleme İpuçları:</h6>
+                <ul class="small text-muted mb-0">
+                    <li>Manifesto şirketinizin değerlerini yansıtmalı</li>
+                    <li>Güçlü ve etkileyici bir dil kullanın</li>
+                    <li>HTML etiketleri ile vurgulama yapabilirsiniz</li>
+                    <li>Görsel öğeler ile destekleyin</li>
+                    <li>Değişiklikler anında sitede görünür</li>
+                </ul>
+                
+                <hr>
+                
+                <h6>SEO İpuçları:</h6>
+                <ul class="small text-muted mb-0">
+                    <li>Başlık 60 karakteri geçmemeli</li>
+                    <li>Alt başlık 160 karakteri geçmemeli</li>
+                    <li>İçerikte anahtar kelimeler kullanın</li>
+                    <li>Resim alt etiketlerini unutmayın</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>İçerik İstatistikleri</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h5 class="text-primary mb-0"><?= str_word_count(strip_tags($manifesto_content['content'])) ?></h5>
+                            <small class="text-muted">Kelime</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-info mb-0"><?= strlen(strip_tags($manifesto_content['content'])) ?></h5>
+                        <small class="text-muted">Karakter</small>
+                    </div>
+                </div>
+                <?php if (isset($manifesto_content['updated_at'])): ?>
+                <hr>
+                <small class="text-muted">
+                    <strong>Son Güncelleme:</strong><br>
+                    <?= formatDate($manifesto_content['updated_at']) ?>
                 </small>
                 <?php endif; ?>
             </div>

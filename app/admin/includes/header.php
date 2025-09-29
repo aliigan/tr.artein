@@ -498,6 +498,13 @@ if (!defined('ADMIN_PANEL')) {
                         <span>Ana Sayfa Slider</span>
                 </a>
             </div>
+            
+                <div class="nav-item nav-sub-item">
+                    <a href="content.php" class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'content.php' ? 'active' : '' ?>">
+                        <i class="fas fa-edit"></i>
+                        <span>İçerik Yönetimi</span>
+                </a>
+            </div>
             </div>
             
             <!-- Media & Communication -->

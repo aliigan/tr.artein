@@ -13,6 +13,14 @@ $pageDescription = 'Arte In manifestomuz: Sanat ve mühendisliğin buluştuğu n
 // Site ayarlarını al
 $settings = getSiteSettings();
 
+// Manifesto içeriğini veritabanından al
+$manifesto_content = $database->fetchOne("SELECT * FROM manifesto_content ORDER BY id DESC LIMIT 1") ?: [
+    'title' => 'Arte in Manifestosu',
+    'subtitle' => 'Sanat ve mühendisliğin buluştuğu noktada değerlerimiz ve felsefemiz',
+    'content' => '<p>Biz Arte In olarak, inşaat sektöründe sadece binalar inşa etmiyoruz; yaşam alanları yaratıyoruz. Her projemizde sanat ve mühendisliğin mükemmel uyumunu sağlayarak, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>',
+    'image' => 'assets/images/manifesto-bg.jpg'
+];
+
 // Sayfa özel stilleri
 $pageSpecificStyles = '
         .page-header {
@@ -216,21 +224,14 @@ include 'includes/header.php';
     <section class="content-section">
         <div class="container">
             <div class="manifesto-content">
-                <h2 class="manifesto-title">Arte in Manifestosu</h2>
+                <h2 class="manifesto-title"><?= escape($manifesto_content['title']) ?></h2>
+                
+                <?php if ($manifesto_content['subtitle']): ?>
+                    <p class="lead text-center mb-4"><?= escape($manifesto_content['subtitle']) ?></p>
+                <?php endif; ?>
                 
                 <div class="manifesto-text">
-                    <p>Biz Arte In olarak, inşaat sektöründe sadece binalar inşa etmiyoruz; yaşam alanları yaratıyoruz. Her projemizde sanat ve mühendisliğin mükemmel uyumunu sağlayarak, müşterilerimizin hayallerini gerçeğe dönüştürüyoruz.</p>
-                    
-                    <div class="quote-section">
-                        "Kalite asla tesadüf değildir. Her zaman yüksek niyet, samimi çaba ve akıllı yönlendirmenin sonucudur."
-                    </div>
-                    
-                    <p>Müşteri memnuniyetini ön planda tutan yaklaşımımız, yenilikçi tasarım anlayışımız ve kaliteli işçiliğimizle her projede mükemmelliği hedefliyoruz. Modern teknoloji ile geleneksel değerleri harmanlayarak, yaşam alanlarınızı daha güzel ve fonksiyonel hale getiriyoruz.</p>
-                </div>
-
-                <div class="manifesto-highlight">
-                    <h3>Vizyonumuz</h3>
-                    <p>İnşaat sektöründe kalite ve estetiği bir araya getirerek, müşterilerimizin hayallerini gerçeğe dönüştüren öncü bir şirket olmak.</p>
+                    <?= $manifesto_content['content'] ?>
                 </div>
             </div>
 
