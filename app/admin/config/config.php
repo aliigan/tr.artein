@@ -21,7 +21,7 @@ define('SITE_URL', 'http://localhost/tr.artein');
 define('ADMIN_URL', SITE_URL . '/app/admin');
 define('UPLOAD_PATH', __DIR__ . '/../../../assets/uploads/');
 define('UPLOAD_URL', SITE_URL . '/assets/uploads');
-define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
+define('MAX_FILE_SIZE', 15 * 1024 * 1024); // 15MB
 
 // Güvenlik ayarları
 define('CSRF_TOKEN_NAME', 'csrf_token');

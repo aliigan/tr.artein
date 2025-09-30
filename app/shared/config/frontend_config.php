@@ -51,6 +51,14 @@ function getActiveSliders() {
 }
 
 /**
+ * Aktif manifesto slider'ları getir
+ */
+function getActiveManifestoSliders() {
+    global $database;
+    return $database->fetchAll("SELECT * FROM manifesto_sliders WHERE is_active = 1 ORDER BY order_index ASC");
+}
+
+/**
  * Hakkımızda içeriğini getir
  */
 function getAboutContent() {

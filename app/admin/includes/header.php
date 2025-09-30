@@ -500,9 +500,23 @@ if (!defined('ADMIN_PANEL')) {
             </div>
             
                 <div class="nav-item nav-sub-item">
+                    <a href="manifesto-sliders.php" class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'manifesto-sliders.php' ? 'active' : '' ?>">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Manifesto Slider</span>
+                </a>
+            </div>
+            
+                <div class="nav-item nav-sub-item">
                     <a href="content.php" class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'content.php' ? 'active' : '' ?>">
                         <i class="fas fa-edit"></i>
                         <span>İçerik Yönetimi</span>
+                </a>
+            </div>
+            
+                <div class="nav-item nav-sub-item">
+                    <a href="about-us.php" class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'about-us.php' ? 'active' : '' ?>">
+                        <i class="fas fa-users"></i>
+                        <span>Hakkımızda</span>
                 </a>
             </div>
             </div>
@@ -583,6 +597,7 @@ if (!defined('ADMIN_PANEL')) {
                         <?= escape($_SESSION['admin_username']) ?>
                     </button>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="change-password.php"><i class="fas fa-key me-2"></i>Şifre Değiştir</a></li>
                         <li><a class="dropdown-item" href="site-management.php"><i class="fas fa-cog me-2"></i>Site Yönetimi</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap</a></li>
