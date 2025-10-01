@@ -312,7 +312,8 @@
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../assets/js/contact-form.js"></script>
+    <!-- contact-form.js disabled - using custom form handling in index.php -->
+    <!-- <script src="../../assets/js/contact-form.js"></script> -->
     
     <?php if (!empty($_SESSION['contact_success'])): ?>
     <!-- Contact success toast -->

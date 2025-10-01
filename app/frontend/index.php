@@ -89,6 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
             } catch (Throwable $e) {}
             // Form verilerini temizle
             unset($_SESSION['form_data']);
+            
+            // AJAX isteği için JSON yanıt
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => $success_message]);
+                exit;
+            }
         } else {
             $error_message = 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.';
             // Form verilerini sakla
@@ -99,6 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                 'subject' => $subject,
                 'message' => $message
             ];
+            
+            // AJAX isteği için JSON yanıt
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => $error_message]);
+                exit;
+            }
         }
     } else {
         $error_message = implode('<br>', $errors);
@@ -110,6 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
             'subject' => $subject,
             'message' => $message
         ];
+        
+        // AJAX isteği için JSON yanıt
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => $error_message]);
+            exit;
+        }
     }
 }
 
@@ -500,14 +521,35 @@ $pageSpecificJS = <<<'HTML'
                     
                     fetch(window.location.href, {
                         method: "POST",
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
                         body: formData
                     })
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(data => {
-                        // Sayfayı yenile
-                        window.location.reload();
+                        if (data.success) {
+                            // Formu temizle
+                            form.reset();
+                            
+                            // reCAPTCHA'yı temizle
+                            if (typeof grecaptcha !== 'undefined') {
+                                grecaptcha.reset();
+                            }
+                            
+                            // Başarı popup'ını göster
+                            showSuccessPopup(data.message);
+                        } else {
+                            // Hata mesajını göster
+                            showAlert(data.message, "danger");
+                        }
+                        
+                        // Butonu eski haline getir
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
                     })
                     .catch(error => {
+                        console.error('Form submission error:', error);
                         showAlert("Bir hata oluştu. Lütfen tekrar deneyin.", "danger");
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
@@ -529,6 +571,41 @@ $pageSpecificJS = <<<'HTML'
             if (form) {
                 form.insertBefore(alertDiv, form.firstChild);
             }
+        }
+        
+        // Başarı popup'ı gösterme fonksiyonu
+        function showSuccessPopup(message) {
+            // Mevcut toast'ları temizle
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            // Yeni toast oluştur
+            const toastHtml = `
+                <div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" id="successToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-check-circle me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Toast'ı body'ye ekle
+            document.body.insertAdjacentHTML('beforeend', toastHtml);
+            
+            // Toast'ı göster
+            const toastElement = document.getElementById('successToast');
+            const toast = new bootstrap.Toast(toastElement, {
+                autohide: true,
+                delay: 5000
+            });
+            toast.show();
+            
+            // Toast kapandığında DOM'dan kaldır
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
         }
     </script>
 HTML;
