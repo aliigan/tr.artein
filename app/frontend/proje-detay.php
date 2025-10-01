@@ -38,14 +38,14 @@ $otherProjects = $database->fetchAll("SELECT * FROM projects WHERE slug != ? AND
 // Sayfa özel stilleri
 $pageSpecificStyles = '
         .page-header {
-            background: linear-gradient(135deg, rgba(17, 55, 54, 0.85), rgba(17, 55, 54, 0.75)), url("../../' . escape($project['featured_image']) . '");
+            background: linear-gradient(135deg, rgba(17, 55, 54, 0.9), rgba(17, 55, 54, 0.8)), url("../../' . escape($project['featured_image']) . '");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            color: #fff;
+            color: var(--artein-white);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -59,7 +59,7 @@ $pageSpecificStyles = '
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(17, 55, 54, 0.1), rgba(30, 95, 93, 0.1));
+            background: linear-gradient(45deg, rgba(17, 55, 54, 0.2), rgba(30, 95, 93, 0.15));
             z-index: 1;
         }
 
@@ -72,25 +72,25 @@ $pageSpecificStyles = '
         }
 
         .page-title {
-            font-family: "Milano Sans", var(--font-display), sans-serif !important;
+            font-family: var(--font-display) !important;
             font-size: 4rem;
-            font-weight: 400;
+            font-weight: var(--fw-regular);
             letter-spacing: 2px;
             margin-bottom: 1.5rem;
             text-shadow: 0 4px 25px rgba(0,0,0,0.7), 0 2px 10px rgba(0,0,0,0.5);
             line-height: 1.1;
-            color: #ffffff !important;
+            color: var(--artein-white) !important;
         }
 
         .page-subtitle {
-            font-family: "Montserrat", var(--font-primary), sans-serif !important;
+            font-family: var(--font-primary) !important;
             font-size: 1.4rem;
-            font-weight: 400;
-            opacity: 0.98;
+            font-weight: var(--fw-regular);
+            opacity: 0.95;
             text-shadow: 0 2px 15px rgba(0,0,0,0.6), 0 1px 5px rgba(0,0,0,0.4);
             line-height: 1.6;
             margin-bottom: 2rem;
-            color: #ffffff !important;
+            color: var(--artein-white) !important;
         }
         
         @media (max-width: 768px) {
@@ -99,58 +99,212 @@ $pageSpecificStyles = '
                 min-height: calc(100vh - 55px);
                 background-attachment: scroll;
             }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+
+        .content-section {
+            background: var(--artein-gray-100);
+            padding: 4rem 0;
         }
 
         .project-detail-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--artein-white);
+            border-radius: var(--radius-xl);
             padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
             margin-bottom: 3rem;
+            border: 1px solid var(--artein-gray-200);
+            position: relative;
+        }
+
+        .project-detail-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--artein-dark), var(--artein-light));
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
         }
 
         .project-info-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--artein-white);
+            border-radius: var(--radius-lg);
             padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
             margin-bottom: 2rem;
+            border: 1px solid var(--artein-gray-200);
+            position: relative;
+        }
+
+        .project-info-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--artein-dark);
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+        }
+
+        .project-info-card h4 {
+            color: var(--artein-dark);
+            font-family: var(--font-display) !important;
+            font-weight: var(--fw-medium);
+            margin-bottom: 1rem;
+        }
+
+        .project-info-card hr {
+            border-color: var(--artein-light);
+            margin: 1rem 0;
+        }
+
+        .project-info-card p {
+            color: var(--artein-gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-info-card strong {
+            color: var(--artein-dark);
+            font-weight: var(--fw-medium);
         }
 
         .project-image {
-            border-radius: 15px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--artein-gray-200);
+        }
+
+        .section-title {
+            font-family: var(--font-display) !important;
+            color: var(--artein-dark);
+            font-weight: var(--fw-medium);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--artein-dark), var(--artein-light));
+            border-radius: var(--radius-sm);
         }
 
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .gallery-item {
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--artein-gray-200);
         }
 
         .gallery-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-xl);
         }
 
         .other-project-card {
-            background: white;
-            border-radius: 15px;
+            background: var(--artein-white);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--artein-gray-200);
         }
 
         .other-project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .other-project-card h5 {
+            color: var(--artein-dark);
+            font-family: var(--font-display) !important;
+            font-weight: var(--fw-medium);
+        }
+
+        .other-project-card .text-muted {
+            color: var(--artein-gray-500) !important;
+        }
+
+        .btn-outline-primary {
+            border-color: var(--artein-dark);
+            color: var(--artein-dark);
+            font-family: var(--font-primary) !important;
+            font-weight: var(--fw-medium);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--artein-dark);
+            border-color: var(--artein-dark);
+            color: var(--artein-white);
+        }
+
+        .btn-primary {
+            background-color: var(--artein-dark);
+            border-color: var(--artein-dark);
+            font-family: var(--font-primary) !important;
+            font-weight: var(--fw-medium);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--artein-black);
+            border-color: var(--artein-black);
+        }
+
+        .badge {
+            font-family: var(--font-primary) !important;
+            font-weight: var(--fw-medium);
+        }
+
+        .badge.bg-success {
+            background-color: var(--artein-green) !important;
+        }
+
+        .badge.bg-warning {
+            background-color: var(--artein-orange) !important;
+        }
+
+        .badge.bg-info {
+            background-color: var(--artein-dark) !important;
+        }
+
+        /* Custom status badges with brand colors */
+        .badge.bg-completed {
+            background-color: var(--artein-green) !important;
+            color: var(--artein-white) !important;
+        }
+
+        .badge.bg-ongoing {
+            background-color: var(--artein-orange) !important;
+            color: var(--artein-white) !important;
+        }
+
+        .badge.bg-planned {
+            background-color: var(--artein-dark) !important;
+            color: var(--artein-white) !important;
         }
 ';
 
@@ -229,10 +383,14 @@ include 'includes/header.php';
                         <hr>
                         <p><strong>Kategori:</strong> <?= escape($project['category']) ?></p>
                         <p><strong>Lokasyon:</strong> <?= escape($project['location']) ?></p>
-                        <p><strong>Başlangıç:</strong> <?= date('d.m.Y', strtotime($project['start_date'])) ?></p>
-                        <p><strong>Bitiş:</strong> <?= date('d.m.Y', strtotime($project['end_date'])) ?></p>
+                        <?php if (!empty($project['start_date']) && $project['start_date'] !== '0000-00-00'): ?>
+                            <p><strong>Başlangıç:</strong> <?= date('d.m.Y', strtotime($project['start_date'])) ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($project['end_date']) && $project['end_date'] !== '0000-00-00'): ?>
+                            <p><strong>Bitiş:</strong> <?= date('d.m.Y', strtotime($project['end_date'])) ?></p>
+                        <?php endif; ?>
                         <p><strong>Durum:</strong> 
-                            <span class="badge bg-<?= $project['status'] === 'completed' ? 'success' : ($project['status'] === 'ongoing' ? 'warning' : 'info') ?>">
+                            <span class="badge bg-<?= $project['status'] === 'completed' ? 'completed' : ($project['status'] === 'ongoing' ? 'ongoing' : 'planned') ?>">
                                 <?= $project['status'] === 'completed' ? 'Tamamlandı' : ($project['status'] === 'ongoing' ? 'Devam Ediyor' : 'Planlanıyor') ?>
                             </span>
                         </p>

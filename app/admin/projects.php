@@ -32,7 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $category = trim($_POST['category'] ?? '');
                 $client = trim($_POST['client'] ?? '');
                 $location = trim($_POST['location'] ?? '');
+                $start_date = $_POST['start_date'] ?? null;
+                $end_date = $_POST['end_date'] ?? null;
                 $completion_date = $_POST['completion_date'] ?? null;
+                $status = $_POST['status'] ?? 'planned';
                 $budget = floatval($_POST['budget'] ?? 0);
                 $order_index = (int)($_POST['order_index'] ?? 0);
                 $is_featured = isset($_POST['is_featured']) ? 1 : 0;
@@ -64,12 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     
                     $sql = "INSERT INTO projects (title, description, content, featured_image, category, client, 
-                            completion_date, location, budget, order_index, is_featured, is_active, slug, 
+                            start_date, end_date, completion_date, status, location, budget, order_index, is_featured, is_active, slug, 
                             meta_title, meta_description) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     if ($database->execute($sql, [$title, $description, $content, $featured_image, $category, 
-                                                  $client, $completion_date, $location, $budget, $order_index, 
+                                                  $client, $start_date, $end_date, $completion_date, $status, $location, $budget, $order_index, 
                                                   $is_featured, $is_active, $slug, $meta_title, $meta_description])) {
                         
                         $project_id = $database->lastInsertId();
@@ -113,7 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $category = trim($_POST['category'] ?? '');
                 $client = trim($_POST['client'] ?? '');
                 $location = trim($_POST['location'] ?? '');
+                $start_date = $_POST['start_date'] ?? null;
+                $end_date = $_POST['end_date'] ?? null;
                 $completion_date = $_POST['completion_date'] ?? null;
+                $status = $_POST['status'] ?? 'planned';
                 $budget = floatval($_POST['budget'] ?? 0);
                 $order_index = (int)($_POST['order_index'] ?? 0);
                 $is_featured = isset($_POST['is_featured']) ? 1 : 0;
@@ -159,12 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     
                     $sql = "UPDATE projects SET title = ?, description = ?, content = ?, featured_image = ?, 
-                            category = ?, client = ?, completion_date = ?, location = ?, budget = ?, 
+                            category = ?, client = ?, start_date = ?, end_date = ?, completion_date = ?, status = ?, location = ?, budget = ?, 
                             order_index = ?, is_featured = ?, is_active = ?, slug = ?, meta_title = ?, 
                             meta_description = ? WHERE id = ?";
                     
                     if ($database->execute($sql, [$title, $description, $content, $featured_image, $category, 
-                                                  $client, $completion_date, $location, $budget, $order_index, 
+                                                  $client, $start_date, $end_date, $completion_date, $status, $location, $budget, $order_index, 
                                                   $is_featured, $is_active, $slug, $meta_title, $meta_description, $id])) {
                         
                         // Ek resimler yükleme
@@ -552,6 +558,33 @@ include 'includes/header.php';
                                             <label class="form-label">Tamamlanma Tarihi</label>
                                             <input type="date" class="form-control" name="completion_date" 
                                                    value="<?= escape($project['completion_date'] ?? '') ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Başlangıç Tarihi</label>
+                                            <input type="date" class="form-control" name="start_date" 
+                                                   value="<?= escape($project['start_date'] ?? '') ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Bitiş Tarihi</label>
+                                            <input type="date" class="form-control" name="end_date" 
+                                                   value="<?= escape($project['end_date'] ?? '') ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Proje Durumu</label>
+                                            <select class="form-control" name="status">
+                                                <option value="planned" <?= ($project['status'] ?? 'planned') === 'planned' ? 'selected' : '' ?>>Planlanıyor</option>
+                                                <option value="ongoing" <?= ($project['status'] ?? 'planned') === 'ongoing' ? 'selected' : '' ?>>Devam Ediyor</option>
+                                                <option value="completed" <?= ($project['status'] ?? 'planned') === 'completed' ? 'selected' : '' ?>>Tamamlandı</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
