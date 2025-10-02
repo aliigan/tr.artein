@@ -21,14 +21,16 @@ define('SITE_URL', 'http://localhost/tr.artein');
 define('ADMIN_URL', SITE_URL . '/app/admin');
 define('UPLOAD_PATH', __DIR__ . '/../../../assets/uploads/');
 define('UPLOAD_URL', SITE_URL . '/assets/uploads');
-define('MAX_FILE_SIZE', 15 * 1024 * 1024); // 15MB
+define('MAX_FILE_SIZE', 100 * 1024 * 1024); // 100MB
 
 // Güvenlik ayarları
 define('CSRF_TOKEN_NAME', 'csrf_token');
 define('SESSION_TIMEOUT', 3600); // 1 saat
 
-// Resim ayarları
+// Medya ayarları
 define('ALLOWED_IMAGE_TYPES', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+define('ALLOWED_VIDEO_TYPES', ['mp4', 'avi', 'mov', 'webm', 'mkv']);
+define('ALLOWED_MEDIA_TYPES', array_merge(ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES));
 define('MAX_IMAGE_WIDTH', 1920);
 define('MAX_IMAGE_HEIGHT', 1080);
 define('THUMBNAIL_WIDTH', 300);

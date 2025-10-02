@@ -101,7 +101,7 @@ function uploadFile($file, $directory = 'general') {
     $fileInfo = pathinfo($file['name']);
     $extension = strtolower($fileInfo['extension']);
     
-    if (!in_array($extension, ALLOWED_IMAGE_TYPES)) {
+    if (!in_array($extension, ALLOWED_MEDIA_TYPES)) {
         return ['success' => false, 'message' => 'Desteklenmeyen dosya türü.'];
     }
     
@@ -117,8 +117,10 @@ function uploadFile($file, $directory = 'general') {
     
     // Dosyayı taşı
     if (move_uploaded_file($file['tmp_name'], $filePath)) {
-        // Resim boyutlandırma (isteğe bağlı)
-        resizeImage($filePath, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT);
+        // Sadece resim dosyaları için boyutlandırma
+        if (in_array($extension, ALLOWED_IMAGE_TYPES)) {
+            resizeImage($filePath, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT);
+        }
         
         $relativePath = 'assets/uploads/' . $directory . '/' . $fileName;
         return [

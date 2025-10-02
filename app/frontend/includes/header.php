@@ -690,15 +690,16 @@ $pageDescription = $pageDescription ?? 'Modern İnşaat Çözümleri';
                             <i class="fas fa-tools me-1"></i>Hizmetler
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= (in_array(basename($_SERVER['PHP_SELF']), ['biz-kimiz.php', 'manifesto.php'])) ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-info-circle me-1"></i>Hakkımızda
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="biz-kimiz.php">Biz Kimiz</a></li>
-                            <li><a class="dropdown-item" href="manifesto.php">Arte in Manifestosu</a></li>
-                        </ul>
-                    </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle <?= (in_array(basename($_SERVER['PHP_SELF']), ['biz-kimiz.php', 'manifesto.php', 'medya-galerisi.php'])) ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-info-circle me-1"></i>Hakkımızda
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="biz-kimiz.php">Biz Kimiz</a></li>
+                        <li><a class="dropdown-item" href="manifesto.php">Arte in Manifestosu</a></li>
+                        <li><a class="dropdown-item" href="medya-galerisi.php">Medya Galerisi</a></li>
+                    </ul>
+                </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php#contact">
                             <i class="fas fa-envelope me-1"></i>İletişim
