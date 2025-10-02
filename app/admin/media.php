@@ -25,6 +25,11 @@ if ($action === 'edit') {
         header('Location: media.php');
         exit;
     }
+    
+    // Edit sayfasında tüm medyaları da listele
+    $allMediaFiles = $database->fetchAll("SELECT m.*, a.username as uploader FROM media_files m 
+                                         LEFT JOIN admin_users a ON m.uploaded_by = a.id 
+                                         ORDER BY m.created_at DESC");
 }
 
 // İşlemler
@@ -270,6 +275,98 @@ include 'includes/header.php';
                 </form>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Medya Listesi -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Tüm Medya Dosyaları</h5>
+    </div>
+    <div class="card-body">
+        <?php if (empty($allMediaFiles)): ?>
+            <div class="text-center py-3">
+                <i class="fas fa-photo-video fa-2x text-muted mb-2"></i>
+                <p class="text-muted">Henüz medya dosyası bulunmuyor.</p>
+            </div>
+        <?php else: ?>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Önizleme</th>
+                            <th>Başlık</th>
+                            <th>Dosya Adı</th>
+                            <th>Tür</th>
+                            <th>Boyut</th>
+                            <th>Tarih</th>
+                            <th style="width: 120px;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($allMediaFiles as $media): ?>
+                            <tr <?= $media['id'] == $editMedia['id'] ? 'class="table-primary"' : '' ?>>
+                                <td>
+                                    <?php if ($media['media_type'] === 'video'): ?>
+                                        <div class="bg-dark rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                            <i class="fas fa-play text-white"></i>
+                                        </div>
+                                    <?php elseif (in_array(strtolower($media['file_type']), ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
+                                        <img src="../../<?= escape($media['file_path']) ?>" 
+                                             class="rounded" style="width: 60px; height: 40px; object-fit: cover;" 
+                                             alt="<?= escape($media['alt_text']) ?>">
+                                    <?php else: ?>
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                            <i class="fas fa-file text-muted"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <strong><?= escape($media['title']) ?: 'Başlık yok' ?></strong>
+                                    <?php if ($media['id'] == $editMedia['id']): ?>
+                                        <span class="badge bg-primary ms-2">Düzenleniyor</span>
+                                    <?php endif; ?>
+                                    <?php if ($media['alt_text']): ?>
+                                        <br><small class="text-muted"><?= escape($media['alt_text']) ?></small>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <span title="<?= escape($media['original_name']) ?>">
+                                        <?= escape(substr($media['original_name'], 0, 25)) ?>
+                                        <?= strlen($media['original_name']) > 25 ? '...' : '' ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary"><?= strtoupper($media['file_type']) ?></span>
+                                </td>
+                                <td>
+                                    <small><?= formatFileSize($media['file_size']) ?></small>
+                                </td>
+                                <td>
+                                    <small><?= formatDate($media['created_at'], 'd.m.Y') ?></small>
+                                </td>
+                                <td>
+                                    <?php if ($media['id'] != $editMedia['id']): ?>
+                                        <a href="media.php?action=edit&id=<?= $media['id'] ?>" 
+                                           class="btn btn-sm btn-outline-primary" title="Düzenle">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="btn btn-sm btn-primary disabled">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                    <?php endif; ?>
+                                    <a href="<?= SITE_URL ?>/<?= escape($media['file_path']) ?>" 
+                                       target="_blank" class="btn btn-sm btn-outline-success ms-1" title="Aç">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
