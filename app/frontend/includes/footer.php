@@ -18,7 +18,7 @@
         }
         .footer-contact p {
             margin-bottom: 0.5rem;
-            color: #fff;
+            color: var(--artein-white);
         }
         .footer-contact i {
             margin-right: 0.5rem;
@@ -48,26 +48,27 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            color: #ffffff;
+            color: var(--artein-white);
             font-size: 1.2rem;
             text-decoration: none;
             transition: all 0.3s ease;
             background: transparent !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border: 1px solid var(--artein-white) !important;
+            opacity: 0.3;
             box-shadow: none !important;
         }
         .social-link:hover {
             transform: translateY(-2px);
             background: transparent !important;
-            color: #ffffff;
+            color: var(--artein-white);
+            opacity: 1;
         }
         
-        /* Debug: Sosyal medya ikonları görünürlük */
+        /* Sosyal medya ikonları görünürlük */
         .social-links {
             display: flex !important;
             gap: 1rem !important;
             margin-top: 1.5rem !important;
-            background: rgba(255,0,0,0.1) !important; /* Debug: Kırmızı arka plan */
         }
         
         .social-link {
@@ -78,8 +79,9 @@
             height: 50px !important;
             border-radius: 50% !important;
             background: var(--artein-dark) !important;
-            border: 2px solid #fff !important;
+            border: 2px solid var(--artein-white) !important;
             text-decoration: none !important;
+            color: var(--artein-white) !important;
         }
         
         
@@ -236,34 +238,34 @@
                         <?php elseif (file_exists('../../assets/images/ArteIn_logos-01.png')): ?>
                             <img src="../../assets/images/ArteIn_logos-01.png" alt="Arte In">
                         <?php else: ?>
-                            <h3 class="text-white"><?= escape(getSetting('company_name', 'Arte In')) ?></h3>
+                            <h3 style="color: var(--artein-white);"><?= escape(getSetting('company_name', 'Arte In')) ?></h3>
                         <?php endif; ?>
                     </div>
-                    <p><?= escape(getSetting('site_description', 'Modern İnşaat Çözümleri')) ?></p>
+                    <p style="color: var(--artein-white); opacity: 0.8;"><?= escape(getSetting('site_description', 'Modern İnşaat Çözümleri')) ?></p>
                 </div>
                 
                 <div class="col-lg-6">
-                    <h5 class="mb-3 text-lg-end">İletişim Bilgileri</h5>
+                    <h5 class="mb-3 text-lg-end" style="color: var(--artein-white);">İletişim Bilgileri</h5>
                     <div class="footer-contact text-lg-end">
                         <p>
                             <i class="fas fa-map-marker-alt"></i>
                             <a href="https://www.google.com/maps/search/<?= urlencode(getSetting('company_address', 'İstanbul, Türkiye')) ?>" 
                                target="_blank" 
-                               class="text-white text-decoration-none">
+                               style="color: var(--artein-white); text-decoration: none;">
                                 <?= escape(getSetting('company_address', 'İstanbul, Türkiye')) ?>
                             </a>
                         </p>
                         <p>
                             <i class="fas fa-phone"></i>
                             <a href="tel:<?= getSetting('company_phone', '+90 555 888 99 88') ?>" 
-                               class="text-white text-decoration-none">
+                               style="color: var(--artein-white); text-decoration: none;">
                                 <?= escape(getSetting('company_phone', '+90 555 888 99 88')) ?>
                             </a>
                         </p>
                         <p>
                             <i class="fas fa-envelope"></i>
                             <a href="mailto:<?= getSetting('company_email', 'info@artein.com') ?>" 
-                               class="text-white text-decoration-none">
+                               style="color: var(--artein-white); text-decoration: none;">
                                 <?= escape(getSetting('company_email', 'info@artein.com')) ?>
                             </a>
                         </p>
@@ -286,21 +288,22 @@
                 
             </div>
             
-            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <hr class="my-4" style="border-color: var(--artein-white); opacity: 0.2;">
             
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0 text-center text-md-start">
+                    <p class="mb-0 text-center text-md-start" style="color: var(--artein-white);">
                         &copy; <?= date('Y') ?> 
                         <strong><?= escape(getSetting('company_name', 'Arte In Construction')) ?></strong>. 
                         Tüm hakları saklıdır.
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <p class="mb-0 text-center text-md-end text-muted">
+                    <p class="mb-0 text-center text-md-end" style="color: var(--artein-white); opacity: 0.7;">
                         <small>
-                        
-                            <a href="#" onclick="showCookieSettings(); return false;" class="text-decoration-underline">
+                            <a href="#" onclick="showCookieSettings(); return false;" 
+                               class="text-decoration-underline" 
+                               style="color: var(--artein-white); opacity: 0.8;">
                                 <i class="fas fa-cookie-bite me-1"></i>Çerez Ayarları
                             </a>
                         </small>
@@ -317,12 +320,14 @@
     
     <?php if (!empty($_SESSION['contact_success'])): ?>
     <!-- Contact success toast -->
-    <div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" id="contactToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+    <div class="toast align-items-center border-0 position-fixed bottom-0 end-0 m-3" id="contactToast" role="alert" aria-live="assertive" aria-atomic="true" 
+         style="z-index: 9999; background-color: var(--artein-dark); color: var(--artein-white);">
         <div class="d-flex">
             <div class="toast-body">
                 <i class="fas fa-check-circle me-2"></i><?= escape($_SESSION['contact_success']) ?>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" 
+                    style="filter: invert(1);"></button>
         </div>
     </div>
     <?php unset($_SESSION['contact_success']); ?>
@@ -342,7 +347,7 @@
                 navbar.style.backdropFilter = 'blur(20px)';
                 navbar.style.boxShadow = '0 2px 30px rgba(17, 55, 54, 0.4)';
             } else {
-                navbar.style.background = 'linear-gradient(135deg, #113736 0%, #1e5f5d 100%)';
+                navbar.style.background = 'var(--artein-dark)';
                 navbar.style.backdropFilter = 'blur(10px)';
                 navbar.style.boxShadow = '0 2px 20px rgba(17, 55, 54, 0.3)';
             }
