@@ -16,6 +16,17 @@ $breadcrumb = [
 
 $action = $_GET['action'] ?? 'list';
 
+// Edit sayfası için özel kontrol
+if ($action === 'edit') {
+    $editId = $_GET['id'] ?? 0;
+    $editMedia = $database->fetchOne("SELECT * FROM media_files WHERE id = ?", [$editId]);
+    if (!$editMedia) {
+        setErrorMessage('Düzenlenecek medya bulunamadı.');
+        header('Location: media.php');
+        exit;
+    }
+}
+
 // İşlemler
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf_token = $_POST['csrf_token'] ?? '';
@@ -120,13 +131,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     
                     if ($database->execute("DELETE FROM media_files WHERE id = ?", [$id])) {
-                        echo json_encode(['success' => true]);
+                        setSuccessMessage('Dosya başarıyla silindi.');
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Dosya silinirken hata oluştu.']);
+                        setErrorMessage('Dosya silinirken hata oluştu.');
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Dosya bulunamadı.']);
+                    setErrorMessage('Dosya bulunamadı.');
                 }
+                header('Location: media.php');
                 exit;
                 break;
                 
@@ -137,26 +149,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $description = trim($_POST['description'] ?? '');
                 
                 if ($database->execute("UPDATE media_files SET title = ?, alt_text = ?, description = ? WHERE id = ?", [$title, $alt_text, $description, $id])) {
-                    echo json_encode(['success' => true]);
+                    setSuccessMessage('Medya bilgileri başarıyla güncellendi.');
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Güncelleme başarısız.']);
+                    setErrorMessage('Güncelleme başarısız.');
                 }
+                header('Location: media.php');
                 exit;
                 break;
                 
-            case 'get_media':
-                $id = $_GET['id'] ?? 0;
-                $media = $database->fetchOne("SELECT * FROM media_files WHERE id = ?", [$id]);
-                if ($media) {
-                    echo json_encode(['success' => true, 'data' => $media]);
-                } else {
-                    echo json_encode(['success' => false, 'message' => 'Medya bulunamadı.']);
-                }
-                exit;
-                break;
         }
     }
 }
+
 
 // Medya dosyalarını listele
 $page = (int)($_GET['page'] ?? 1);
@@ -197,6 +201,79 @@ include 'includes/header.php';
 ?>
 
 <?= displayMessages() ?>
+
+<?php if ($action === 'edit'): ?>
+<!-- Edit Form -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Medya Düzenle</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Media Preview -->
+                <div class="text-center mb-3">
+                    <?php if ($editMedia['media_type'] === 'video'): ?>
+                        <video class="img-fluid rounded" style="max-height: 300px;" controls>
+                            <source src="../../<?= escape($editMedia['file_path']) ?>" type="video/<?= $editMedia['file_type'] ?>">
+                        </video>
+                    <?php elseif (in_array(strtolower($editMedia['file_type']), ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
+                        <img src="../../<?= escape($editMedia['file_path']) ?>" 
+                             class="img-fluid rounded" style="max-height: 300px;" 
+                             alt="<?= escape($editMedia['alt_text']) ?>">
+                    <?php else: ?>
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-file fa-3x text-muted"></i>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="text-center">
+                    <small class="text-muted">
+                        <strong>Dosya:</strong> <?= escape($editMedia['original_name']) ?><br>
+                        <strong>Boyut:</strong> <?= formatFileSize($editMedia['file_size']) ?><br>
+                        <strong>Tür:</strong> <?= strtoupper($editMedia['file_type']) ?>
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- Edit Form -->
+                <form method="POST" action="media.php?action=update">
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
+                    <input type="hidden" name="id" value="<?= $editMedia['id'] ?>">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Başlık</label>
+                        <input type="text" class="form-control" name="title" 
+                               value="<?= escape($editMedia['title']) ?>" placeholder="Medya başlığı">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Alt Metin (Alt Text)</label>
+                        <input type="text" class="form-control" name="alt_text" 
+                               value="<?= escape($editMedia['alt_text']) ?>" placeholder="SEO için alt metin">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama</label>
+                        <textarea class="form-control" name="description" rows="4" 
+                                  placeholder="Medya açıklaması"><?= escape($editMedia['description']) ?></textarea>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Kaydet
+                        </button>
+                        <a href="media.php" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>İptal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php else: ?>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -280,15 +357,23 @@ include 'includes/header.php';
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#" onclick="editMedia(<?= $media['id'] ?>)">
+                                            <li><a class="dropdown-item" href="media.php?action=edit&id=<?= $media['id'] ?>">
                                                 <i class="fas fa-edit me-2"></i>Düzenle</a></li>
                                             <li><a class="dropdown-item" href="<?= SITE_URL ?>/<?= escape($media['file_path']) ?>" target="_blank">
                                                 <i class="fas fa-external-link-alt me-2"></i>Aç</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="copyMediaUrl('<?= SITE_URL ?>/<?= escape($media['file_path']) ?>')">
+                                            <li><a class="dropdown-item" href="#" onclick="copyToClipboard('<?= SITE_URL ?>/<?= escape($media['file_path']) ?>')">
                                                 <i class="fas fa-copy me-2"></i>URL Kopyala</a></li>
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item text-danger" href="#" onclick="deleteMedia(<?= $media['id'] ?>)">
-                                                <i class="fas fa-trash me-2"></i>Sil</a></li>
+                                            <li>
+                                                <form method="POST" action="media.php?action=delete" style="display: inline;" 
+                                                      onsubmit="return confirm('Bu dosyayı silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!')">
+                                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
+                                                    <input type="hidden" name="id" value="<?= $media['id'] ?>">
+                                                    <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; width: 100%; text-align: left;">
+                                                        <i class="fas fa-trash me-2"></i>Sil
+                                                    </button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -321,6 +406,8 @@ include 'includes/header.php';
         <?php endif; ?>
     </div>
 </div>
+
+<?php endif; // End of edit check ?>
 
 <!-- Upload Modal -->
 <div class="modal fade" id="uploadModal" tabindex="-1">
@@ -392,121 +479,51 @@ include 'includes/header.php';
     </div>
 </div>
 
-<!-- Media Detail Modal -->
-<div class="modal fade" id="mediaModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Medya Detayları</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="mediaModalContent">
-                <!-- Content will be loaded via AJAX -->
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
-$(document).ready(function() {
-    // Global functions
-    window.deleteMedia = function(mediaId) {
-        if (confirm("Bu dosyayı silmek istediğinizden emin misiniz?")) {
-            $.post("media.php?action=delete", {
-                csrf_token: "<?= $_SESSION[CSRF_TOKEN_NAME] ?>",
-                id: mediaId
-            }, function(response) {
-                if (response.success) {
-                    $("#media-" + mediaId).fadeOut(function() {
-                        $(this).remove();
-                    });
-                } else {
-                    alert("Hata: " + response.message);
-                }
-            }, "json");
-        }
-    };
-
-    window.copyMediaUrl = function(url) {
-        navigator.clipboard.writeText(url).then(function() {
+// Basit URL kopyalama fonksiyonu - AJAX yok!
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
             alert("URL kopyalandı!");
+        }).catch(function() {
+            // Fallback
+            fallbackCopy(text);
         });
-    };
+    } else {
+        // Fallback for older browsers
+        fallbackCopy(text);
+    }
+}
 
-    window.showMediaModal = function(mediaId) {
-        // Load media details via AJAX
-        $("#mediaModalContent").html("<div class=\"text-center\"><i class=\"fas fa-spinner fa-spin\"></i> Yükleniyor...</div>");
-        $("#mediaModal").modal("show");
-        
-        // Here you can load detailed media info via AJAX
-    };
+function fallbackCopy(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            alert("URL kopyalandı!");
+        } else {
+            alert("URL kopyalanamadı. Lütfen manuel olarak kopyalayın:\n" + text);
+        }
+    } catch (err) {
+        alert("URL kopyalanamadı. Lütfen manuel olarak kopyalayın:\n" + text);
+    }
+    
+    document.body.removeChild(textArea);
+}
 
-    window.editMedia = function(mediaId) {
-        // Get media data and show edit modal
-        $.get("media.php?action=get_media&id=" + mediaId, function(response) {
-            if (response.success) {
-                const media = response.data;
-                const csrfToken = "<?= $_SESSION[CSRF_TOKEN_NAME] ?>";
-                
-                // Create modal HTML
-                let editModal = "<div class=\"modal fade\" id=\"editMediaModal\" tabindex=\"-1\">";
-                editModal += "<div class=\"modal-dialog\">";
-                editModal += "<div class=\"modal-content\">";
-                editModal += "<div class=\"modal-header\">";
-                editModal += "<h5 class=\"modal-title\">Medya Düzenle</h5>";
-                editModal += "<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\"></button>";
-                editModal += "</div>";
-                editModal += "<form id=\"editMediaForm\">";
-                editModal += "<div class=\"modal-body\">";
-                editModal += "<input type=\"hidden\" name=\"id\" value=\"" + media.id + "\">";
-                editModal += "<input type=\"hidden\" name=\"csrf_token\" value=\"" + csrfToken + "\">";
-                editModal += "<div class=\"mb-3\">";
-                editModal += "<label class=\"form-label\">Başlık</label>";
-                editModal += "<input type=\"text\" class=\"form-control\" name=\"title\" value=\"" + (media.title || "") + "\">";
-                editModal += "</div>";
-                editModal += "<div class=\"mb-3\">";
-                editModal += "<label class=\"form-label\">Alt Metin</label>";
-                editModal += "<input type=\"text\" class=\"form-control\" name=\"alt_text\" value=\"" + (media.alt_text || "") + "\">";
-                editModal += "</div>";
-                editModal += "<div class=\"mb-3\">";
-                editModal += "<label class=\"form-label\">Açıklama</label>";
-                editModal += "<textarea class=\"form-control\" name=\"description\" rows=\"3\">" + (media.description || "") + "</textarea>";
-                editModal += "</div>";
-                editModal += "</div>";
-                editModal += "<div class=\"modal-footer\">";
-                editModal += "<button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">İptal</button>";
-                editModal += "<button type=\"submit\" class=\"btn btn-primary\">Kaydet</button>";
-                editModal += "</div>";
-                editModal += "</form>";
-                editModal += "</div>";
-                editModal += "</div>";
-                editModal += "</div>";
-                
-                $("body").append(editModal);
-                $("#editMediaModal").modal("show");
-                
-                $("#editMediaForm").on("submit", function(e) {
-                    e.preventDefault();
-                    $.post("media.php?action=update", $(this).serialize(), function(response) {
-                        if (response.success) {
-                            $("#editMediaModal").modal("hide");
-                            location.reload();
-                        } else {
-                            alert("Hata: " + response.message);
-                        }
-                    }, "json");
-                });
-                
-                $("#editMediaModal").on("hidden.bs.modal", function() {
-                    $(this).remove();
-                });
-            }
-        }, "json");
-    };
-
-    // Upload form handler
+// Upload form handler
+$(document).ready(function() {
     $("#uploadForm").on("submit", function(e) {
-        // Check if files are selected
         const fileInput = $('input[name="media_files[]"]')[0];
         if (!fileInput.files || fileInput.files.length === 0) {
             e.preventDefault();
@@ -517,15 +534,12 @@ $(document).ready(function() {
         const uploadBtn = $("#uploadBtn");
         const progressDiv = $("#uploadProgress");
         
-        // Show progress
         progressDiv.removeClass("d-none");
         uploadBtn.prop("disabled", true).html('<i class="fas fa-spinner fa-spin me-2"></i>Yükleniyor...');
         
-        // Allow form to submit normally
         return true;
     });
     
-    // Reset form when modal is hidden
     $("#uploadModal").on("hidden.bs.modal", function() {
         $("#uploadForm")[0].reset();
         $("#uploadProgress").addClass("d-none");
