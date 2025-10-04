@@ -1,0 +1,4 @@
+# Config klasörü güvenlik ayarları
+# Config dosyalarına doğrudan erişimi engelle
+Order Deny,Allow
+Deny from all
