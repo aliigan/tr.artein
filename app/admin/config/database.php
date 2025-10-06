@@ -6,10 +6,10 @@
 
 // Geliştirme ortamı için ayarlar
 // Canlı sunucuda bu değerleri değiştirin
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'buildtech_cms');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', '94.138.202.230');
+define('DB_NAME', 'artein_db');
+define('DB_USER', 'artein_user');
+define('DB_PASS', 'arteinHK24!');
 define('DB_CHARSET', 'utf8mb4');
 
 // Veritabanı bağlantısı sınıfı
