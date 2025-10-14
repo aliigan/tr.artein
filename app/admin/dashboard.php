@@ -54,7 +54,7 @@ include 'includes/header.php';
         <a href="site-management.php" class="btn btn-primary me-2">
             <i class="fas fa-globe me-2"></i>Site Yönetimi
         </a>
-        <a href="projects.php?action=create" class="btn btn-outline-primary">
+        <a href="projects.php?action=add" class="btn btn-outline-primary">
             <i class="fas fa-plus me-2"></i>Yeni Proje
         </a>
     </div>
@@ -67,9 +67,9 @@ include 'includes/header.php';
         <small class="text-muted">Son güncelleme: <?= date('H:i') ?></small>
     </div>
     <div class="d-flex flex-wrap gap-2">
-        <a href="projects.php?action=create" class="quick-action-btn">
+        <a href="projects.php" class="quick-action-btn">
             <i class="fas fa-building"></i>
-            Yeni Proje Ekle
+            Projeleri Yönet
         </a>
         <a href="services.php" class="quick-action-btn">
             <i class="fas fa-tools"></i>
@@ -90,7 +90,7 @@ include 'includes/header.php';
                 <span class="badge bg-danger ms-1"><?= $stats['messages'] ?></span>
             <?php endif; ?>
         </a>
-        <a href="<?= SITE_URL ?>" target="_blank" class="quick-action-btn">
+        <a href="https://artein.tr" target="_blank" class="quick-action-btn">
             <i class="fas fa-external-link-alt"></i>
             Siteyi Görüntüle
         </a>
