@@ -247,7 +247,7 @@ include 'includes/header.php';
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
                         </button>
-                        <a href="<?= SITE_URL ?>/app/frontend/biz-kimiz.php" target="_blank" class="btn btn-outline-secondary">
+                        <a href="https://artein.tr#about" target="_blank" class="btn btn-outline-secondary">
                             <i class="fas fa-eye me-2"></i>Önizleme
                         </a>
                     </div>
@@ -364,8 +364,8 @@ include 'includes/header.php';
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
                         </button>
-                        <a href="<?= SITE_URL ?>/app/frontend/manifesto.php" target="_blank" class="btn btn-outline-secondary">
-                            <i class="fas fa-eye me-2"></i>Önizleme
+                        <a href="https://artein.tr/app/frontend/manifesto.php" target="_blank" class="btn btn-outline-secondary">
+                            <i class="fas fa-external-link-alt me-2"></i>Siteyi Görüntüle
                         </a>
                     </div>
                 </form>
@@ -570,7 +570,7 @@ include 'includes/header.php';
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Ayarları Kaydet
                 </button>
-                <a href="<?= SITE_URL ?>" target="_blank" class="btn btn-outline-secondary">
+                <a href="https://artein.tr" target="_blank" class="btn btn-outline-secondary">
                     <i class="fas fa-external-link-alt me-2"></i>Siteyi Görüntüle
                 </a>
             </div>
@@ -606,24 +606,6 @@ include 'includes/header.php';
             </div>
         </div>
         
-        <div class="card mt-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-tools me-2"></i>Hızlı İşlemler</h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="<?= SITE_URL ?>/app/frontend/index.php" target="_blank" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-home me-2"></i>Ana Sayfayı Görüntüle
-                    </a>
-                    <a href="<?= SITE_URL ?>/app/frontend/biz-kimiz.php" target="_blank" class="btn btn-sm btn-outline-info">
-                        <i class="fas fa-users me-2"></i>Hakkımızda Sayfası
-                    </a>
-                    <a href="messages.php" class="btn btn-sm btn-outline-success">
-                        <i class="fas fa-envelope me-2"></i>İletişim Mesajları
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
