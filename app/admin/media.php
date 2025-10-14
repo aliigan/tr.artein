@@ -356,7 +356,7 @@ include 'includes/header.php';
                                             <i class="fas fa-edit"></i>
                                         </span>
                                     <?php endif; ?>
-                                    <a href="<?= SITE_URL ?>/<?= escape($media['file_path']) ?>" 
+                                    <a href="https://artein.tr/<?= escape($media['file_path']) ?>" 
                                        target="_blank" class="btn btn-sm btn-outline-success ms-1" title="Aç">
                                         <i class="fas fa-external-link-alt"></i>
                                     </a>
@@ -456,9 +456,9 @@ include 'includes/header.php';
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="media.php?action=edit&id=<?= $media['id'] ?>">
                                                 <i class="fas fa-edit me-2"></i>Düzenle</a></li>
-                                            <li><a class="dropdown-item" href="<?= SITE_URL ?>/<?= escape($media['file_path']) ?>" target="_blank">
+                                            <li><a class="dropdown-item" href="https://artein.tr/<?= escape($media['file_path']) ?>" target="_blank">
                                                 <i class="fas fa-external-link-alt me-2"></i>Aç</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="copyToClipboard('<?= SITE_URL ?>/<?= escape($media['file_path']) ?>')">
+                                            <li><a class="dropdown-item" href="#" onclick="copyToClipboard('https://artein.tr/<?= escape($media['file_path']) ?>')">
                                                 <i class="fas fa-copy me-2"></i>URL Kopyala</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
