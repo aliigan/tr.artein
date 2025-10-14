@@ -75,14 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
         if (saveContactMessage($name, $email, $phone, $subject, $message)) {
             $success_message = 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.';
             $_SESSION['contact_success'] = $success_message;
-            try {
-                if (isset($database)) {
-                    $today = date('Y-m-d');
-                    $database->execute("INSERT INTO site_stats (stat_date, page_views, unique_visitors, contact_forms) VALUES (?, 0, 0, 0) ON DUPLICATE KEY UPDATE stat_date = stat_date", [$today]);
-                    $database->execute("UPDATE site_stats SET contact_forms = contact_forms + 1 WHERE stat_date = ?", [$today]);
-                }
-            } catch (Throwable $e) {}
+            // Form verilerini temizle
             unset($_SESSION['form_data']);
+            // AJAX isteği için JSON yanıt
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => $success_message]);
@@ -96,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                     $error_message .= ' [' . $dbErr . ']';
                 }
             }
+            // Form verilerini sakla
             $_SESSION['form_data'] = [
                 'name' => $name,
                 'email' => $email,
@@ -103,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                 'subject' => $subject,
                 'message' => $message
             ];
+            // AJAX isteği için JSON yanıt
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => $error_message]);
