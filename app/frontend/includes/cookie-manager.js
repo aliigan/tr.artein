@@ -212,13 +212,12 @@ class CookieManager {
         
         // Yeni alert oluştur
         const alertDiv = document.createElement('div');
-        alertDiv.className = `alert ${alertClass} cookie-notification position-fixed`;
+        alertDiv.className = 'alert ' + alertClass + ' cookie-notification position-fixed';
         alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 10000; min-width: 300px;';
-        alertDiv.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
-        `;
+        alertDiv.innerHTML = 
+            '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'info-circle') + ' me-2"></i>' +
+            message +
+            '<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>';
         
         document.body.appendChild(alertDiv);
         
@@ -234,7 +233,7 @@ class CookieManager {
     setCookie(name, value, days) {
         const expires = new Date();
         expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/;SameSite=Lax';
         console.log('Çerez kaydedildi:', name, value);
     }
 
@@ -250,7 +249,7 @@ class CookieManager {
     }
 
     deleteCookie(name) {
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
         console.log('Çerez silindi:', name);
     }
 

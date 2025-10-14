@@ -22,8 +22,8 @@ $pageTitle = $settings['site_title'] ?? 'Arte In Engineering';
 $pageDescription = $settings['site_description'] ?? 'Modern İnşaat Çözümleri';
 
 // Google reCAPTCHA Site Key (Bu değeri Google reCAPTCHA konsolundan alın)
-define('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'); // Test key
-define('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'); // Test secret
+define('RECAPTCHA_SITE_KEY', '6Lepu-grAAAAAAMBBN9oxtEdXLtM00kDbDT3Yxvt');
+define('RECAPTCHA_SECRET_KEY', '6Lepu-grAAAAAIwUMbcGSV_KugykQ3yR2YAKb1wb');
 
 // İletişim formu işlemi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
     if (empty($email)) $errors[] = 'E-posta alanı zorunludur.';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Geçerli bir e-posta adresi girin.';
     if (empty($message)) $errors[] = 'Mesaj alanı zorunludur.';
-    // Telefon (opsiyonel) doğrulama: +, boşluk, -, ( ) ve rakamlar; en az 10 rakam
     if (!empty($phone)) {
         $cleanPhone = preg_replace('/[\s\-\(\)]+/', '', $phone);
         if (!preg_match('/^\+?[0-9]{10,15}$/', $cleanPhone)) {
@@ -57,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
             'response' => $recaptcha_response,
             'remoteip' => $_SERVER['REMOTE_ADDR']
         ];
-        
         $options = [
             'http' => [
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -65,11 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                 'content' => http_build_query($recaptcha_data)
             ]
         ];
-        
         $context = stream_context_create($options);
         $result = file_get_contents($recaptcha_url, false, $context);
         $recaptcha_result = json_decode($result, true);
-        
         if (!$recaptcha_result['success']) {
             $errors[] = 'reCAPTCHA doğrulaması başarısız. Lütfen tekrar deneyin.';
         }
@@ -79,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
         if (saveContactMessage($name, $email, $phone, $subject, $message)) {
             $success_message = 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.';
             $_SESSION['contact_success'] = $success_message;
-            // Bugünkü istatistiklerde contact_forms +1
             try {
                 if (isset($database)) {
                     $today = date('Y-m-d');
@@ -87,10 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                     $database->execute("UPDATE site_stats SET contact_forms = contact_forms + 1 WHERE stat_date = ?", [$today]);
                 }
             } catch (Throwable $e) {}
-            // Form verilerini temizle
             unset($_SESSION['form_data']);
-            
-            // AJAX isteği için JSON yanıt
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => $success_message]);
@@ -98,7 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
             }
         } else {
             $error_message = 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.';
-            // Form verilerini sakla
+            if (isset($database)) {
+                $dbErr = method_exists($database, 'getLastErrorMessage') ? $database->getLastErrorMessage() : '';
+                if (!empty($dbErr)) {
+                    $error_message .= ' [' . $dbErr . ']';
+                }
+            }
             $_SESSION['form_data'] = [
                 'name' => $name,
                 'email' => $email,
@@ -106,8 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
                 'subject' => $subject,
                 'message' => $message
             ];
-            
-            // AJAX isteği için JSON yanıt
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => $error_message]);
@@ -116,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
         }
     } else {
         $error_message = implode('<br>', $errors);
-        // Form verilerini sakla
         $_SESSION['form_data'] = [
             'name' => $name,
             'email' => $email,
@@ -124,8 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
             'subject' => $subject,
             'message' => $message
         ];
-        
-        // AJAX isteği için JSON yanıt
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
             echo json_encode(['success' => false, 'message' => $error_message]);
@@ -417,7 +409,7 @@ include 'includes/header.php';
                                     <div class="mb-3">
                                         <label class="form-label">Telefon</label>
                                         <input type="tel" class="form-control" name="phone" placeholder="Ör: +90 555 123 45 67"
-                                               pattern="^\+?[0-9\s\-\(\)]{10,20}$" maxlength="20"
+                                               pattern="^\+?[0-9]{10,15}$" maxlength="20"
                                                value="<?= escape($form_data['phone'] ?? '') ?>">
                                         <small class="text-muted">Sadece rakam, boşluk ve + işareti kullanılabilir.</small>
                                     </div>
@@ -458,7 +450,6 @@ include 'includes/header.php';
 // Index.php page specific JavaScript
 $pageSpecificJS = <<<'HTML'
     <script>
-        // Bootstrap Toast init
         document.addEventListener("DOMContentLoaded", function() {
             const toastEl = document.getElementById("contactToast");
             if (toastEl) {
@@ -466,146 +457,58 @@ $pageSpecificJS = <<<'HTML'
                 t.show();
             }
         });
-        // Form validation
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.querySelector("form");
             if (form) {
                 form.addEventListener("submit", function(e) {
-                    e.preventDefault(); // Sayfa yenilenmesini engelle
-                    
-                    const name = document.querySelector("input[name=\\"name\\"]").value.trim();
-                    const email = document.querySelector("input[name=\\"email\\"]").value.trim();
-                    const phone = document.querySelector("input[name=\\"phone\\"]").value.trim();
-                    const message = document.querySelector("textarea[name=\\"message\\"]").value.trim();
-                    const recaptcha = document.querySelector("textarea[name=\\"g-recaptcha-response\\"]").value.trim();
-                    
-                    // Hata mesajlarını temizle
+                    e.preventDefault();
+                    const name = document.querySelector("input[name='name']").value.trim();
+                    const email = document.querySelector("input[name='email']").value.trim();
+                    const phone = document.querySelector("input[name='phone']").value.trim();
+                    const message = document.querySelector("textarea[name='message']").value.trim();
+                    const recaptcha = document.querySelector("textarea[name='g-recaptcha-response']").value.trim();
                     const existingAlerts = document.querySelectorAll(".alert");
                     existingAlerts.forEach(alert => alert.remove());
-                    
-                    if (!name || !email || !message) {
-                        showAlert("Lütfen zorunlu alanları doldurun.", "danger");
-                        return false;
-                    }
-                    
-                    // Email validation
-                    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        showAlert("Lütfen geçerli bir e-posta adresi girin.", "danger");
-                        return false;
-                    }
-
-                    // Phone validation (optional)
-                    if (phone) {
-                        const phoneClean = phone.replace(/[\\s\\-\\(\\)]/g, '');
-                        if (!/^\\+?[0-9]{10,15}$/.test(phoneClean)) {
-                            showAlert("Lütfen geçerli bir telefon numarası girin.", "danger");
-                            return false;
-                        }
-                    }
-                    
-                    // reCAPTCHA validation
-                    if (!recaptcha) {
-                        showAlert("Lütfen güvenlik doğrulamasını tamamlayın.", "danger");
-                        return false;
-                    }
-                    
-                    // Form gönderiliyor, loading göster
-                    const submitBtn = document.querySelector("button[type=\\"submit\\"]");
+                    if (!name || !email || !message) { showAlert("Lütfen zorunlu alanları doldurun.", "danger"); return false; }
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) { showAlert("Lütfen geçerli bir e-posta adresi girin.", "danger"); return false; }
+                    if (phone) { const phoneClean = phone.replace(/[\s\-\(\)]/g, ''); if (!/^\+?[0-9]{10,15}$/.test(phoneClean)) { showAlert("Lütfen geçerli bir telefon numarası girin.", "danger"); return false; } }
+                    if (!recaptcha) { showAlert("Lütfen güvenlik doğrulamasını tamamlayın.", "danger"); return false; }
+                    const submitBtn = document.querySelector("button[type='submit']");
                     const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = "<i class=\\"fas fa-spinner fa-spin me-2\\"></i>Gönderiliyor...";
+                    submitBtn.innerHTML = "<i class='fas fa-spinner fa-spin me-2'></i>Gönderiliyor...";
                     submitBtn.disabled = true;
-                    
-                    // Formu AJAX ile gönder
                     const formData = new FormData(form);
-                    
-                    fetch(window.location.href, {
-                        method: "POST",
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: formData
-                    })
+                    fetch(window.location.href, { method: "POST", headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: formData })
                     .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Formu temizle
-                            form.reset();
-                            
-                            // reCAPTCHA'yı temizle
-                            if (typeof grecaptcha !== 'undefined') {
-                                grecaptcha.reset();
-                            }
-                            
-                            // Başarı popup'ını göster
-                            showSuccessPopup(data.message);
-                        } else {
-                            // Hata mesajını göster
-                            showAlert(data.message, "danger");
-                        }
-                        
-                        // Butonu eski haline getir
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    })
-                    .catch(error => {
-                        console.error('Form submission error:', error);
-                        showAlert("Bir hata oluştu. Lütfen tekrar deneyin.", "danger");
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    });
+                    .then(data => { if (data.success) { form.reset(); if (typeof grecaptcha !== 'undefined') { grecaptcha.reset(); } showSuccessPopup(data.message); } else { showAlert(data.message, "danger"); } submitBtn.innerHTML = originalText; submitBtn.disabled = false; })
+                    .catch(error => { console.error('Form submission error:', error); showAlert("Bir hata oluştu. Lütfen tekrar deneyin.", "danger"); submitBtn.innerHTML = originalText; submitBtn.disabled = false; });
                 });
             }
         });
-        
-        // Alert gösterme fonksiyonu
         function showAlert(message, type) {
             const alertDiv = document.createElement("div");
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-            alertDiv.innerHTML = `
-                <i class="fas fa-exclamation-triangle me-2"></i>${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
+            alertDiv.className = 'alert alert-' + type + ' alert-dismissible fade show';
+            alertDiv.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
             const form = document.querySelector(".contact-form");
-            if (form) {
-                form.insertBefore(alertDiv, form.firstChild);
-            }
+            if (form) { form.insertBefore(alertDiv, form.firstChild); }
         }
-        
-        // Başarı popup'ı gösterme fonksiyonu
         function showSuccessPopup(message) {
-            // Mevcut toast'ları temizle
             const existingToasts = document.querySelectorAll('.toast');
             existingToasts.forEach(toast => toast.remove());
-            
-            // Yeni toast oluştur
-            const toastHtml = `
-                <div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" id="successToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="fas fa-check-circle me-2"></i>${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            `;
-            
-            // Toast'ı body'ye ekle
+            const toastHtml = '<div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" id="successToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999;">' +
+                '<div class="d-flex">' +
+                '<div class="toast-body">' +
+                '<i class="fas fa-check-circle me-2"></i>' + message +
+                '</div>' +
+                '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+                '</div>' +
+                '</div>';
             document.body.insertAdjacentHTML('beforeend', toastHtml);
-            
-            // Toast'ı göster
             const toastElement = document.getElementById('successToast');
-            const toast = new bootstrap.Toast(toastElement, {
-                autohide: true,
-                delay: 5000
-            });
+            const toast = new bootstrap.Toast(toastElement, { autohide: true, delay: 5000 });
             toast.show();
-            
-            // Toast kapandığında DOM'dan kaldır
-            toastElement.addEventListener('hidden.bs.toast', function() {
-                toastElement.remove();
-            });
+            toastElement.addEventListener('hidden.bs.toast', function() { toastElement.remove(); });
         }
     </script>
 HTML;

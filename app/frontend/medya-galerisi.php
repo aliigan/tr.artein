@@ -459,48 +459,44 @@ function openMediaViewer(mediaId) {
         const content = document.getElementById('mediaViewerContent');
         console.log('Media data:', mediaData); // Debug log
         console.log('File path:', mediaData.file_path); // Debug log
-        console.log('Full URL:', `../../${mediaData.file_path}`); // Debug log
+        console.log('Full URL:', '../../' + mediaData.file_path); // Debug log
         
                 if (mediaData.media_type === 'video') {
-                    content.innerHTML = `
-                        <video controls autoplay muted class="w-100 h-100" style="max-height: 80vh; max-width: 100%;">
-                            <source src="../../${mediaData.file_path}" type="video/${mediaData.file_type}">
-                            Tarayıcınız video oynatmayı desteklemiyor.
-                        </video>
-                    `;
+                    content.innerHTML = 
+                        '<video controls autoplay muted class="w-100 h-100" style="max-height: 80vh; max-width: 100%;">' +
+                            '<source src="../../' + mediaData.file_path + '" type="video/' + mediaData.file_type + '">' +
+                            'Tarayıcınız video oynatmayı desteklemiyor.' +
+                        '</video>';
         } else {
-            content.innerHTML = `
-                <img src="../../${mediaData.file_path}" class="img-fluid" 
-                     alt="${mediaData.alt_text || mediaData.title}"
-                     style="max-height: 80vh; max-width: 100%; object-fit: contain;">
-            `;
+            content.innerHTML = 
+                '<img src="../../' + mediaData.file_path + '" class="img-fluid" ' +
+                     'alt="' + (mediaData.alt_text || mediaData.title) + '" ' +
+                     'style="max-height: 80vh; max-width: 100%; object-fit: contain;">';
         }
         
         // Set description
         const description = document.getElementById('mediaViewerDescription');
         if (mediaData.description) {
-            description.innerHTML = `
-                <div class="row">
-                    <div class="col-md-8">
-                        <p class="mb-0">${mediaData.description}</p>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <small>
-                            <i class="fas fa-calendar me-1"></i>
-                            ${mediaData.created_at}
-                        </small>
-                    </div>
-                </div>
-            `;
+            description.innerHTML = 
+                '<div class="row">' +
+                    '<div class="col-md-8">' +
+                        '<p class="mb-0">' + mediaData.description + '</p>' +
+                    '</div>' +
+                    '<div class="col-md-4 text-end">' +
+                        '<small>' +
+                            '<i class="fas fa-calendar me-1"></i>' +
+                            mediaData.created_at +
+                        '</small>' +
+                    '</div>' +
+                '</div>';
         } else {
-            description.innerHTML = `
-                <div class="text-end">
-                    <small>
-                        <i class="fas fa-calendar me-1"></i>
-                        ${mediaData.created_at}
-                    </small>
-                </div>
-            `;
+            description.innerHTML = 
+                '<div class="text-end">' +
+                    '<small>' +
+                        '<i class="fas fa-calendar me-1"></i>' +
+                        mediaData.created_at +
+                    '</small>' +
+                '</div>';
         }
         
         modal.show();

@@ -112,14 +112,35 @@ function getProjectImages($project_id) {
 function saveContactMessage($name, $email, $phone, $subject, $message) {
     global $database;
     
+    // Debug: Database bağlantısını kontrol et
+    if (!isset($database)) {
+        error_log("saveContactMessage - Database object not found!");
+        return false;
+    }
+    
     $sql = "INSERT INTO contact_messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)";
     
-    if ($database->execute($sql, [$name, $email, $phone, $subject, $message])) {
-        // İstatistik güncelle
-        $today = date('Y-m-d');
-        $database->execute("INSERT INTO site_stats (stat_date, contact_forms) VALUES (?, 1) 
-                           ON DUPLICATE KEY UPDATE contact_forms = contact_forms + 1", [$today]);
-        return true;
+    // Hata ayıklama için loglama
+    error_log("saveContactMessage called with: " . print_r([$name, $email, $phone, $subject, $message], true));
+    error_log("SQL: " . $sql);
+    
+    try {
+        $result = $database->execute($sql, [$name, $email, $phone, $subject, $message]);
+        error_log("Database execute result: " . ($result ? 'true' : 'false'));
+        
+        if ($result) {
+            error_log("Contact message inserted successfully");
+            // İstatistik güncelle
+            $today = date('Y-m-d');
+            $statsResult = $database->execute("INSERT INTO site_stats (stat_date, contact_forms) VALUES (?, 1) 
+                               ON DUPLICATE KEY UPDATE contact_forms = contact_forms + 1", [$today]);
+            error_log("Stats update result: " . ($statsResult ? 'true' : 'false'));
+            return true;
+        } else {
+            error_log("Contact message insert failed - execute returned false");
+        }
+    } catch (Exception $e) {
+        error_log("Contact message insert exception: " . $e->getMessage());
     }
     
     return false;
