@@ -227,7 +227,7 @@ include 'includes/header.php';
                 <i class="fas fa-arrow-left"></i>
                 Geri Dön
             </a>
-            <a href="../frontend/index.php" target="_blank" class="btn btn-info btn-sm">
+            <a href="https://artein.tr" target="_blank" class="btn btn-info btn-sm">
                 <i class="fas fa-external-link-alt"></i>
                 Siteyi Görüntüle
             </a>

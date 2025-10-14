@@ -544,7 +544,7 @@ if (!defined('ADMIN_PANEL')) {
             
             <!-- External Links -->
             <div class="nav-item">
-                <a href="<?= SITE_URL ?>" target="_blank" class="nav-link">
+                <a href="https://artein.tr" target="_blank" class="nav-link">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Siteyi Görüntüle</span>
                 </a>
