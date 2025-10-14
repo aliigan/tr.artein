@@ -390,7 +390,7 @@ include 'includes/header.php';
                                     <div class="mb-3">
                                         <label class="form-label">İsim Soyisim *</label>
                                         <input type="text" class="form-control" name="name" minlength="2" maxlength="100" 
-                                               value="<?= escape($form_data['name'] ?? '') ?>" required>
+                                               pattern="[a-zA-ZçğıöşüÇĞIİÖŞÜ\s]+" value="<?= escape($form_data['name'] ?? '') ?>" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -405,23 +405,38 @@ include 'includes/header.php';
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Telefon</label>
-                                        <input type="tel" class="form-control" name="phone" placeholder="Ör: +90 555 123 45 67"
-                                               pattern="^\+?[0-9]{10,15}$" maxlength="20"
-                                               value="<?= escape($form_data['phone'] ?? '') ?>">
-                                        <small class="text-muted">Sadece rakam, boşluk ve + işareti kullanılabilir.</small>
+                                        <div class="input-group phone-input-group">
+                                            <select class="form-select phone-cc" name="phone_cc" aria-label="Ülke Kodu">
+                                                <option value="+90" selected data-flag="tr" data-country="TR">🇹🇷 +90 TR</option>
+                                                <option value="+1" data-flag="us" data-country="US">🇺🇸 +1 US</option>
+                                                <option value="+44" data-flag="gb" data-country="GB">🇬🇧 +44 GB</option>
+                                                <option value="+49" data-flag="de" data-country="DE">🇩🇪 +49 DE</option>
+                                                <option value="+33" data-flag="fr" data-country="FR">🇫🇷 +33 FR</option>
+                                                <option value="+971" data-flag="ae" data-country="AE">🇦🇪 +971 AE</option>
+                                                <option value="+7" data-flag="ru" data-country="RU">🇷🇺 +7 RU</option>
+                                                <option value="+86" data-flag="cn" data-country="CN">🇨🇳 +86 CN</option>
+                                                <option value="+81" data-flag="jp" data-country="JP">🇯🇵 +81 JP</option>
+                                                <option value="+91" data-flag="in" data-country="IN">🇮🇳 +91 IN</option>
+                                            </select>
+                                            <input type="tel" class="form-control phone-local" name="phone_local" placeholder="555 123 45 67"
+                                                   maxlength="20" pattern="[0-9\s\-\(\)]+" inputmode="numeric" value="">
+                                        </div>
+                                        <input type="hidden" name="phone" value="<?= escape($form_data['phone'] ?? '') ?>">
+                                        <small class="text-muted">Ülke kodu seçin, numarayı boşluksuz veya boşluklu yazabilirsiniz.</small>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Konu</label>
                                         <input type="text" class="form-control" name="subject" maxlength="150" 
-                                               value="<?= escape($form_data['subject'] ?? '') ?>">
+                                               pattern="[a-zA-ZçğıöşüÇĞIİÖŞÜ0-9\s\-\.\,\!\?]+" value="<?= escape($form_data['subject'] ?? '') ?>">
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Mesaj *</label>
-                                <textarea class="form-control" name="message" rows="5" minlength="10" maxlength="2000" required><?= escape($form_data['message'] ?? '') ?></textarea>
+                                <textarea class="form-control" name="message" rows="5" minlength="10" maxlength="2000" 
+                                          pattern="[a-zA-ZçğıöşüÇĞIİÖŞÜ0-9\s\-\.\,\!\?\n\r]+" required><?= escape($form_data['message'] ?? '') ?></textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Güvenlik Doğrulaması *</label>
@@ -461,7 +476,15 @@ $pageSpecificJS = <<<'HTML'
                     e.preventDefault();
                     const name = document.querySelector("input[name='name']").value.trim();
                     const email = document.querySelector("input[name='email']").value.trim();
-                    const phone = document.querySelector("input[name='phone']").value.trim();
+                    const ccEl = document.querySelector("select[name='phone_cc']");
+                    const phoneLocalEl = document.querySelector("input[name='phone_local']");
+                    const phoneHiddenEl = document.querySelector("input[name='phone']");
+                    const cc = ccEl ? ccEl.value.trim() : '';
+                    const phoneLocal = phoneLocalEl ? phoneLocalEl.value.trim() : '';
+                    const digitsOnly = phoneLocal.replace(/\D/g, '');
+                    const composedPhone = digitsOnly ? (cc + digitsOnly) : '';
+                    if (phoneHiddenEl) { phoneHiddenEl.value = composedPhone; }
+                    const phone = composedPhone;
                     const message = document.querySelector("textarea[name='message']").value.trim();
                     const recaptcha = document.querySelector("textarea[name='g-recaptcha-response']").value.trim();
                     const existingAlerts = document.querySelectorAll(".alert");
@@ -469,8 +492,15 @@ $pageSpecificJS = <<<'HTML'
                     if (!name || !email || !message) { showAlert("Lütfen zorunlu alanları doldurun.", "danger"); return false; }
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(email)) { showAlert("Lütfen geçerli bir e-posta adresi girin.", "danger"); return false; }
-                    if (phone) { const phoneClean = phone.replace(/[\s\-\(\)]/g, ''); if (!/^\+?[0-9]{10,15}$/.test(phoneClean)) { showAlert("Lütfen geçerli bir telefon numarası girin.", "danger"); return false; } }
                     if (!recaptcha) { showAlert("Lütfen güvenlik doğrulamasını tamamlayın.", "danger"); return false; }
+                    // Phone validation (optional)
+                    if (phone) {
+                        const phoneClean = phone.replace(/[\s\-\(\)]/g, '');
+                        if (!/^\+?[0-9]{10,15}$/.test(phoneClean)) {
+                            showAlert("Lütfen geçerli bir telefon numarası girin.", "danger");
+                            return false;
+                        }
+                    }
                     const submitBtn = document.querySelector("button[type='submit']");
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = "<i class='fas fa-spinner fa-spin me-2'></i>Gönderiliyor...";
@@ -507,6 +537,134 @@ $pageSpecificJS = <<<'HTML'
             toast.show();
             toastElement.addEventListener('hidden.bs.toast', function() { toastElement.remove(); });
         }
+        // Ek stil: telefon input grubu marka uyumu
+        (function(){
+            const style = document.createElement('style');
+            style.textContent = `
+                .phone-input-group {
+                    position: relative;
+                }
+                .phone-input-group .form-select { 
+                    max-width: 150px; 
+                    border-color: var(--artein-dark); 
+                    background-color: var(--artein-dark);
+                    color: white;
+                    font-weight: 500;
+                    border-radius: 8px 0 0 8px;
+                    border-right: none;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 4px rgba(17,55,54,0.1);
+                    font-size: 14px;
+                }
+                .phone-input-group .form-control { 
+                    border-color: var(--artein-dark);
+                    border-radius: 0 8px 8px 0;
+                    border-left: 1px solid var(--artein-dark);
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 4px rgba(17,55,54,0.1);
+                }
+                .phone-input-group .form-select:focus, 
+                .phone-input-group .form-control:focus {
+                    box-shadow: 0 0 0 3px rgba(30,95,93,.15), 0 4px 8px rgba(17,55,54,0.2);
+                    border-color: var(--artein-dark);
+                    transform: translateY(-1px);
+                }
+                /* Hover states */
+                .phone-input-group .form-select:hover {
+                    background-color: #0a2524;
+                    border-color: var(--artein-dark);
+                    color: white;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(17,55,54,0.15);
+                }
+                .phone-input-group .form-control:hover {
+                    border-color: var(--artein-dark);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(17,55,54,0.15);
+                }
+                /* Modern dropdown arrow */
+                .phone-input-group .form-select {
+                    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+                    background-repeat: no-repeat;
+                    background-position: right 0.75rem center;
+                    background-size: 16px 12px;
+                    padding-right: 2.5rem;
+                }
+                /* Country flag and code styling - clean black/white text */
+                .phone-cc option {
+                    padding: 8px 12px;
+                    font-size: 14px;
+                    line-height: 1.4;
+                    color: #333;
+                    background-color: white;
+                }
+                .phone-cc option:hover {
+                    background-color: #f8f9fa;
+                    color: #333;
+                }
+                .phone-cc option:checked {
+                    background-color: var(--artein-light);
+                    color: var(--artein-dark);
+                }
+            `;
+            document.head.appendChild(style);
+        })();
+
+        // Modern interactions and input restrictions
+        (function(){
+            const ccEl = document.querySelector('select[name="phone_cc"]');
+            if (!ccEl) return;
+            
+            // Add modern focus/blur effects
+            ccEl.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            ccEl.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+            
+            // Telefon numarası alanına sadece rakam, boşluk, tire ve parantez girilebilir
+            const phoneInput = document.querySelector('input[name="phone_local"]');
+            if (phoneInput) {
+                phoneInput.addEventListener('keypress', function(e) {
+                    // İzin verilen karakterler: rakam, boşluk, tire, parantez
+                    const allowedChars = /[0-9\s\-\(\)]/;
+                    if (!allowedChars.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+                
+                // Paste event için de kontrol
+                phoneInput.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        let value = this.value;
+                        // Sadece izin verilen karakterleri tut
+                        value = value.replace(/[^0-9\s\-\(\)]/g, '');
+                        this.value = value;
+                    }, 0);
+                });
+            }
+            
+            // İsim alanına sadece harf ve boşluk
+            const nameInput = document.querySelector('input[name="name"]');
+            if (nameInput) {
+                nameInput.addEventListener('keypress', function(e) {
+                    const allowedChars = /[a-zA-ZçğıöşüÇĞIİÖŞÜ\s]/;
+                    if (!allowedChars.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+                
+                nameInput.addEventListener('paste', function(e) {
+                    setTimeout(() => {
+                        let value = this.value;
+                        value = value.replace(/[^a-zA-ZçğıöşüÇĞIİÖŞÜ\s]/g, '');
+                        this.value = value;
+                    }, 0);
+                });
+            }
+        })();
     </script>
 HTML;
 
