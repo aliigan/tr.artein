@@ -366,6 +366,26 @@
                 }
             });
         });
+
+        // Auto-collapse mobile navbar when a menu item is clicked
+        (function() {
+            const navbarCollapseEl = document.getElementById('navbarNav');
+            if (!navbarCollapseEl) return;
+            const clickableSelectors = '.navbar-collapse .nav-link, .navbar-collapse .dropdown-item';
+            document.querySelectorAll(clickableSelectors).forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    // Dropdown başlığında menüyü kapatma (sadece alt öğeler açılmalı)
+                    if (this.classList.contains('dropdown-toggle') || this.getAttribute('data-bs-toggle') === 'dropdown') {
+                        return;
+                    }
+                    const isShown = navbarCollapseEl.classList.contains('show');
+                    if (isShown && typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+                        const instance = bootstrap.Collapse.getInstance(navbarCollapseEl) || new bootstrap.Collapse(navbarCollapseEl, { toggle: false });
+                        instance.hide();
+                    }
+                });
+            });
+        })();
     </script>
     
     <!-- Çerez Banner'ı -->
