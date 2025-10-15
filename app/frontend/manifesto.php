@@ -178,15 +178,15 @@ $pageSpecificStyles = '
 
         .principles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             margin-top: 3rem;
         }
 
         .principle-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: 18px;
-            padding: 2.5rem;
+            padding: 2rem;
             box-shadow: 0 15px 30px rgba(17, 55, 54, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid rgba(17, 55, 54, 0.1);
@@ -217,7 +217,7 @@ $pageSpecificStyles = '
 
         .principle-card h4 {
             font-family: "Milano Sans", "Montserrat", sans-serif !important;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             color: #113736;
             margin-bottom: 1rem;
             font-weight: 400;
@@ -227,7 +227,25 @@ $pageSpecificStyles = '
             font-family: "Montserrat", sans-serif;
             color: #2c3e50;
             line-height: 1.7;
-            font-size: 1.05rem;
+            font-size: 1rem;
+        }
+
+        /* Mobile responsiveness for manifesto content and values */
+        @media (max-width: 768px) {
+            .manifesto-content { padding: 2rem; }
+            .principles-section { padding: 2.5rem 1.25rem; }
+            .principles-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+            .principle-card { padding: 1.25rem; }
+        }
+        @media (max-width: 576px) {
+            .principle-card { padding: 1rem; }
+        }
+        .principle-card,
+        .manifesto-text,
+        .manifesto-content {
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            hyphens: auto;
         }
 
         .breadcrumb {

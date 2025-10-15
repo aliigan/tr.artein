@@ -400,6 +400,30 @@ $pageSpecificStyles = '
             color: #113736;
             text-decoration: underline; 
         }
+
+        /* Mobile responsiveness fixes for vision/mission grid */
+        .vision-mission-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+        @media (max-width: 768px) {
+            .about-content { padding: 2rem; }
+            .vision-mission-section { padding: 2.5rem 1.25rem; }
+            .vision-mission-card { padding: 1.75rem; }
+            .vision-mission-card h4 { font-size: 1.35rem; }
+            .vision-mission-card p { font-size: 1rem; }
+        }
+        @media (max-width: 576px) {
+            .vision-mission-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+            .vision-mission-card { padding: 1.25rem; }
+        }
+        /* Prevent text/box overflow on very narrow screens */
+        .vision-mission-card,
+        .about-text,
+        .about-content {
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            hyphens: auto;
+        }
 ';
 
 // Header'ı include et
