@@ -91,3 +91,34 @@
     </script>
 </body>
 </html>
+
+<script>
+// Admin lightweight polling for unread messages and today stats
+(function(){
+    const endpoint = '../shared/updates.php';
+    const unreadBadge = document.querySelector('.quick-action-btn[href="messages.php"] .badge');
+    const todayViewsEl = document.querySelector('h4.text-primary.mb-1');
+    const todayUvEl = document.querySelector('h4.text-success.mb-1');
+    const todayCfEl = document.querySelector('h4.text-warning.mb-1');
+    function poll(){
+        fetch(endpoint, { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+            if (!data || !data.success) return;
+            const unread = data.counts && data.counts.unread_messages !== undefined ? data.counts.unread_messages : 0;
+            if (unreadBadge) {
+                if (unread > 0) { unreadBadge.textContent = unread; unreadBadge.classList.remove('d-none'); }
+                else { unreadBadge.textContent = ''; unreadBadge.classList.add('d-none'); }
+            }
+            const today = data.counts && data.counts.today ? data.counts.today : null;
+            if (today) {
+                if (todayViewsEl) todayViewsEl.textContent = today.page_views;
+                if (todayUvEl) todayUvEl.textContent = today.unique_visitors;
+                if (todayCfEl) todayCfEl.textContent = today.contact_forms;
+            }
+        }).catch(()=>{});
+    }
+    setInterval(poll, 15000);
+    poll();
+})();
+</script>

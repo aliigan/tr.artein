@@ -387,6 +387,45 @@
             });
         })();
     </script>
+    <script>
+        // Lightweight polling for content updates (every 15s)
+        (function() {
+            let lastVersion = 0;
+            const endpoint = '../../app/shared/updates.php';
+            function showRefreshToast() {
+                const existing = document.getElementById('contentUpdateToast');
+                if (existing) return;
+                const toastHtml = '<div class="toast align-items-center border-0 position-fixed bottom-0 end-0 m-3" id="contentUpdateToast" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999; background-color: var(--artein-dark); color: var(--artein-white);">' +
+                    '<div class="d-flex">' +
+                    '<div class="toast-body">' +
+                    '<i class="fas fa-sync-alt me-2"></i>Yeni içerik mevcut. Görüntüyü güncellemek ister misiniz?' +
+                    '</div>' +
+                    '<div class="d-flex align-items-center me-2">' +
+                    '<button type="button" class="btn btn-sm btn-light me-2" id="refreshNowBtn">Güncelle</button>' +
+                    '<button type="button" class="btn-close btn-close-white m-auto" data-bs-dismiss="toast" aria-label="Close"></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                document.body.insertAdjacentHTML('beforeend', toastHtml);
+                const toastEl = document.getElementById('contentUpdateToast');
+                const toast = new bootstrap.Toast(toastEl, { autohide: false });
+                toast.show();
+                document.getElementById('refreshNowBtn').addEventListener('click', function() { window.location.reload(); });
+            }
+            function poll() {
+                fetch(endpoint, { cache: 'no-store' })
+                    .then(r => r.ok ? r.json() : null)
+                    .then(data => {
+                        if (!data || !data.success) return;
+                        if (lastVersion === 0) { lastVersion = data.version; return; }
+                        if (data.version > lastVersion) { showRefreshToast(); lastVersion = data.version; }
+                    })
+                    .catch(() => {});
+            }
+            setInterval(poll, 15000);
+            poll();
+        })();
+    </script>
     
     <!-- Çerez Banner'ı -->
     <?php include 'cookie-banner.php'; ?>
